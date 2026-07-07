@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.qrserver.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <title>Trace Gym</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page gym-bg" data-page="login">
+  <main class="auth-shell">
+    <section class="glass-panel auth-card">
+      <div class="brand-block">
+        <div class="panel-topline">
+          <div class="brand-mark">
+            <img class="brand-logo-image" src="assets/trace-gym-logo.png" alt="Trace Gym logo">
+          </div>
+          <div class="language-switcher" data-language-switcher>
+            <button class="is-active" type="button" data-lang="en">ENG</button>
+            <button type="button" data-lang="my">မြန်မာ</button>
+          </div>
+        </div>
+        <h1 data-i18n="login.title">Gym Membership System</h1>
+        <p data-i18n="login.subtitle">Admin and member access for registration, attendance, workouts, and membership tracking.</p>
+      </div>
+
+      <div class="role-toggle" id="loginRoleToggle">
+        <button class="is-active button-inline" type="button" data-role="member">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7 8a7 7 0 0 1 14 0"></path></svg>
+          <span data-i18n="login.member_role">Member Login</span>
+        </button>
+        <button class="button-inline" type="button" data-role="admin">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7l7-4Z"></path><path d="M9.5 12.5 11 14l3.5-4"></path></svg>
+          <span data-i18n="login.admin_role">Admin Login</span>
+        </button>
+      </div>
+
+      <form id="loginForm" class="form-stack">
+        <input id="loginRole" type="hidden" value="member">
+
+        <div class="field">
+          <label for="loginIdentifier" data-i18n="login.identifier_label">Phone / Username</label>
+          <input id="loginIdentifier" type="text" autocomplete="username" data-i18n-placeholder="login.placeholder_member_identifier" placeholder="09xxxxxxxxx" required>
+        </div>
+
+        <div class="field">
+          <label for="loginPassword" data-i18n="login.password_label">Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" data-i18n-placeholder="login.placeholder_member_password" placeholder="Member NRC" required>
+        </div>
+
+        <p id="loginMessage" class="form-message" aria-live="polite"></p>
+
+        <button id="loginButton" class="primary-button button-inline" type="submit">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5l7 7-7 7"></path><path d="M3 12h17"></path></svg>
+          <span data-i18n="login.button">Login</span>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <a class="secondary-button button-inline" href="register.html">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+          <span data-i18n="login.register_link">New Member Registration</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="i18n.js"></script>
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

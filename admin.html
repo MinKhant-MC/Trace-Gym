@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.qrserver.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <title>Trace Gym Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="app-page gym-bg" data-page="admin">
+  <div class="dashboard-shell">
+    <aside class="side-panel glass-panel">
+      <div>
+        <div class="brand-mark">
+          <img class="brand-logo-image" src="assets/trace-gym-logo.png" alt="Trace Gym logo">
+        </div>
+        <h2 data-i18n="admin.sidebar_title">Admin Panel</h2>
+        <p class="muted-text" data-i18n="admin.sidebar_text">Approve members, read member QR codes, and monitor membership status.</p>
+      </div>
+      <div class="language-switcher" data-language-switcher>
+        <button class="is-active" type="button" data-lang="en">ENG</button>
+        <button type="button" data-lang="my">မြန်မာ</button>
+      </div>
+      <div class="side-actions">
+        <a class="secondary-button button-inline" href="register.html">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+          <span data-i18n="common.open_registration">Open Registration</span>
+        </a>
+        <button id="logoutButton" class="ghost-button button-inline" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l-5-5 5-5"></path><path d="M5 12h10"></path><path d="M14 5h5v14h-5"></path></svg>
+          <span data-i18n="common.logout">Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="content-panel">
+      <section class="page-hero glass-panel">
+        <div>
+          <h1 data-i18n="admin.hero_title">Admin Dashboard</h1>
+          <p id="adminSummaryText" data-i18n="admin.loading">Loading gym system...</p>
+        </div>
+      </section>
+
+      <section class="stats-grid">
+        <article class="glass-panel stat-card">
+          <span data-i18n="admin.total_members">Total Active Members</span>
+          <strong id="totalMembers">0</strong>
+        </article>
+        <article class="glass-panel stat-card">
+          <span data-i18n="admin.pending_count">Pending Approvals</span>
+          <strong id="pendingCount">0</strong>
+        </article>
+        <article class="glass-panel stat-card">
+          <span data-i18n="admin.present_today">Checked In Today</span>
+          <strong id="presentToday">0</strong>
+        </article>
+        <article class="glass-panel stat-card">
+          <span data-i18n="admin.expiring_count">Expiring Soon</span>
+          <strong id="expiringCount">0</strong>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="glass-panel">
+          <div class="section-head">
+            <div>
+              <h2 data-i18n="admin.scanner_title">Member QR Check-In</h2>
+              <p class="section-copy" data-i18n="admin.scanner_text">Ask the member to show their QR code. This device reads it and records attendance.</p>
+            </div>
+          </div>
+          <div class="scanner-tools">
+            <button id="startScannerButton" class="primary-button button-inline" type="button">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5h4"></path><path d="M20 9V5h-4"></path><path d="M4 15v4h4"></path><path d="M20 15v4h-4"></path><path d="M9 12h6"></path></svg>
+              <span data-i18n="common.start_scanner">Start Scanner</span>
+            </button>
+            <button id="showGymQrButton" class="secondary-button button-inline" type="button">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10H7z"></path><path d="M9.5 9.5h1"></path><path d="M13.5 9.5h1"></path><path d="M9.5 13.5h1"></path><path d="M13.5 13.5h1"></path></svg>
+              <span data-i18n="admin.show_gym_qr">Show Gym QR</span>
+            </button>
+            <button id="stopScannerButton" class="secondary-button button-inline" type="button" hidden>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1"></rect></svg>
+              <span data-i18n="common.stop_scanner">Stop Scanner</span>
+            </button>
+          </div>
+          <video id="scannerVideo" class="scanner-video" hidden playsinline muted></video>
+          <p id="scannerMessage" class="form-message" aria-live="polite"></p>
+        </article>
+
+        <article class="glass-panel">
+          <div class="section-head">
+            <div>
+              <h2 data-i18n="admin.notifications_title">System Notifications</h2>
+              <p class="section-copy" data-i18n="admin.notifications_text">Membership expiry alerts for admin</p>
+            </div>
+          </div>
+          <div id="adminNotifications" class="list-stack"></div>
+        </article>
+      </section>
+
+      <section class="glass-panel">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="admin.pending_title">Pending Registrations</h2>
+            <p class="section-copy" data-i18n="admin.pending_text">Approve members before they can enter the system</p>
+          </div>
+        </div>
+        <div id="pendingRegistrations" class="list-stack"></div>
+      </section>
+
+      <section class="glass-panel">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="admin.attendance_title">Today's Attendance</h2>
+            <p class="section-copy" data-i18n="admin.attendance_text">Members scanned into the gym today</p>
+          </div>
+        </div>
+        <div id="todayAttendance" class="list-stack"></div>
+      </section>
+
+      <section class="glass-panel">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="admin.all_members_title">All Members</h2>
+            <p class="section-copy" data-i18n="admin.all_members_text">All approved members in this gym.</p>
+          </div>
+        </div>
+        <div id="allMembersList" class="list-stack"></div>
+      </section>
+
+      <section class="glass-panel search-section">
+        <div class="section-head section-head-stack">
+          <div>
+            <h2 data-i18n="admin.search_title">Search Members</h2>
+            <p class="section-copy" data-i18n="admin.search_text">Search by member name or phone number</p>
+          </div>
+        </div>
+        <form id="memberSearchForm" class="search-row">
+          <input id="memberSearchInput" type="search" data-i18n-placeholder="admin.search_placeholder" placeholder="Search by name or phone">
+          <button class="primary-button button-inline" type="submit">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+            <span data-i18n="common.search">Search</span>
+          </button>
+        </form>
+        <div id="searchResults" class="list-stack"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="gymQrModal" class="modal-overlay" hidden>
+    <div class="modal-panel glass-panel qr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="gymQrModalTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="gymQrModalTitle" data-i18n="admin.gym_qr_title">Gym Entry QR</h2>
+          <p class="section-copy" data-i18n="admin.gym_qr_text">Open this QR on the admin device. Logged-in members can scan it from their dashboard to mark arrival automatically.</p>
+        </div>
+        <button id="closeGymQrModalButton" class="ghost-button button-inline small" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg>
+          <span data-i18n="common.close">Close</span>
+        </button>
+      </div>
+      <div class="qr-card qr-modal-card">
+        <div id="adminGymQrImage" class="qr-render" aria-label="Gym entry QR code"></div>
+        <strong id="adminGymQrName" data-i18n="admin.gym_qr_name">Trace Gym Entry QR</strong>
+        <p id="adminGymQrMeta" class="muted-text" data-i18n="admin.gym_qr_meta">Members scan this from their dashboard to check in.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="memberEditModal" class="modal-overlay" hidden>
+    <div class="modal-panel glass-panel member-edit-panel" role="dialog" aria-modal="true" aria-labelledby="memberEditModalTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="memberEditModalTitle" data-i18n="admin.edit_member_title">Edit Member</h2>
+          <p class="section-copy" data-i18n="admin.edit_member_text">Update member information and membership details.</p>
+        </div>
+        <button id="closeMemberEditModalButton" class="ghost-button button-inline small" type="button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg>
+          <span data-i18n="common.close">Close</span>
+        </button>
+      </div>
+      <form id="memberEditForm" class="form-grid two-column">
+        <input id="editMemberId" type="hidden">
+        <div class="field">
+          <label for="editFullName" data-i18n="register.name">Name</label>
+          <input id="editFullName" type="text" required>
+        </div>
+        <div class="field">
+          <label for="editPhone" data-i18n="register.phone">Phone</label>
+          <input id="editPhone" type="tel" required>
+        </div>
+        <div class="field">
+          <label for="editEmail" data-i18n="register.email_optional">Email (Optional)</label>
+          <input id="editEmail" type="email">
+        </div>
+        <div class="field">
+          <label for="editNrc" data-i18n="register.nrc">NRC</label>
+          <input id="editNrc" type="text" required>
+        </div>
+        <div class="field">
+          <label for="editGender" data-i18n="register.gender">Gender</label>
+          <select id="editGender" required>
+            <option value="Male" data-i18n="register.gender_male">Male</option>
+            <option value="Female" data-i18n="register.gender_female">Female</option>
+            <option value="Other" data-i18n="register.gender_other">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="editStatus" data-i18n="admin.member_status">Status</label>
+          <select id="editStatus" required>
+            <option value="active" data-i18n="value.active">Active</option>
+            <option value="inactive" data-i18n="value.inactive">Inactive</option>
+            <option value="expired" data-i18n="value.expired">Expired</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="editWeight" data-i18n="register.weight">Weight (kg)</label>
+          <div class="unit-input">
+            <input id="editWeight" type="text" inputmode="decimal" required>
+            <select id="editWeightUnit" aria-label="Weight unit">
+              <option value="kg">kg</option>
+              <option value="lb">lb / pb</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="editHeight" data-i18n="register.height">Height (cm)</label>
+          <div class="unit-input">
+            <input id="editHeight" type="text" inputmode="decimal" required>
+            <select id="editHeightUnit" aria-label="Height unit">
+              <option value="cm">cm</option>
+              <option value="ft">ft</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="editAge" data-i18n="register.age">Age</label>
+          <input id="editAge" type="number" min="1" required>
+        </div>
+        <div class="field">
+          <label for="editStartDate" data-i18n="register.start_date">Start Date</label>
+          <input id="editStartDate" type="date" required>
+        </div>
+        <div class="field">
+          <label for="editMonths" data-i18n="register.months">How Many Months</label>
+          <input id="editMonths" type="number" min="1" required>
+        </div>
+        <div class="field">
+          <label for="editTrainer" data-i18n="register.personal_trainer">Personal Trainer</label>
+          <select id="editTrainer">
+            <option value="No" data-i18n="register.trainer_no">No</option>
+            <option value="Yes" data-i18n="register.trainer_yes">Yes</option>
+          </select>
+        </div>
+        <div class="field field-span-2">
+          <label for="editGoalNote" data-i18n="register.goal_note">Fitness Goal / Note</label>
+          <input id="editGoalNote" type="text">
+        </div>
+        <label class="check-row field-span-2">
+          <input id="editResetPassword" type="checkbox">
+          <span data-i18n="admin.reset_password_to_nrc">Reset member password to NRC</span>
+        </label>
+        <div class="field field-span-2">
+          <p id="memberEditMessage" class="form-message" aria-live="polite"></p>
+          <button id="memberEditSaveButton" class="primary-button button-inline" type="submit">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span data-i18n="common.save">Save</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="i18n.js"></script>
+  <script src="api.js"></script>
+  <script src="common.js"></script>
+  <script src="auth.js"></script>
+  <script src="vendor/qrcode.min.js"></script>
+  <script src="vendor/zxing-browser.min.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
