@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.qrserver.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Trace Gym Registration</title>
   <meta name="theme-color" content="#111111">
@@ -90,14 +90,14 @@
               <input id="weightKg" type="text" inputmode="decimal" required>
               <select id="weightUnit" aria-label="Weight unit">
                 <option value="kg">kg</option>
-                <option value="lb">lb / pb</option>
+                <option value="lb">lb</option>
               </select>
             </div>
           </div>
           <div class="field">
             <label for="heightCm" data-i18n="register.height">Height (cm)</label>
             <div class="unit-input">
-              <input id="heightCm" type="text" inputmode="decimal" required>
+              <input id="heightCm" type="text" inputmode="text" placeholder="5'6&quot; or 5.6" required>
               <select id="heightUnit" aria-label="Height unit">
                 <option value="cm">cm</option>
                 <option value="ft">ft</option>
