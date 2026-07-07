@@ -192,6 +192,9 @@ body {
   color: var(--text);
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -200,6 +203,7 @@ body {
     radial-gradient(circle at 80% 16%, rgba(240, 202, 98, 0.12), transparent 18%),
     radial-gradient(circle at 76% 76%, rgba(212, 153, 39, 0.12), transparent 22%),
     linear-gradient(180deg, #090a0d 0%, #0d1015 36%, #0b0d12 100%);
+  touch-action: manipulation;
 }
 
 body.is-modal-open {
@@ -220,6 +224,9 @@ body.is-modal-open {
 .auth-page,
 .app-page {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .auth-page {
@@ -1499,5 +1506,71 @@ html[lang="my"] .stat-card span {
 
   html[lang="my"] h2 {
     font-size: 20px;
+  }
+}
+
+/* Registration date input mobile fix: keep it inside the card and left aligned. */
+.app-page[data-page="register"] .form-stack {
+  min-width: 0;
+}
+
+.app-page[data-page="register"] .field,
+.app-page[data-page="register"] .field-span-2 {
+  min-width: 0;
+}
+
+.app-page[data-page="register"] input[type="date"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  text-align: left !important;
+}
+
+.app-page[data-page="register"] input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+@media (max-width: 520px) {
+  .app-page[data-page="register"] .glass-panel {
+    overflow: hidden;
+  }
+
+  .app-page[data-page="register"] .form-stack {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .app-page[data-page="register"] input[type="date"] {
+    padding-left: 14px !important;
+    padding-right: 42px !important;
+  }
+
+  input,
+  select,
+  textarea,
+  button,
+  .field input,
+  .field select,
+  .search-row input {
+    font-size: 16px !important;
+  }
+
+  .page-shell,
+  .dashboard-shell,
+  .auth-shell,
+  .content-panel,
+  .side-panel,
+  .glass-panel,
+  .form-grid,
+  .field,
+  .field-span-2 {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .button-inline {
+    white-space: normal;
   }
 }
