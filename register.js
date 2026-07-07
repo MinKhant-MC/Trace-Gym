@@ -234,6 +234,24 @@
     });
   }
 
+  function bindPasswordToggles() {
+    document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var input = byId(button.getAttribute('data-toggle-password'));
+        var visible;
+
+        if (!input) {
+          return;
+        }
+
+        visible = input.type === 'text';
+        input.type = visible ? 'password' : 'text';
+        button.classList.toggle('is-visible', !visible);
+        button.setAttribute('aria-label', visible ? 'Show password' : 'Hide password');
+      });
+    });
+  }
+
   function handleSubmit(event) {
     var payload = collectForm();
     var button = byId('registerButton');
@@ -286,6 +304,8 @@
     if (form) {
       form.addEventListener('submit', handleSubmit);
     }
+
+    bindPasswordToggles();
 
     if (byId('photoUpload')) {
       byId('photoUpload').addEventListener('change', handleFileChange);
