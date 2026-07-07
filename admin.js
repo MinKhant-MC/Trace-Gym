@@ -608,6 +608,23 @@
     });
   }
 
+  function bindUnitHints() {
+    var heightInput = byId('editHeight');
+    var heightUnit = byId('editHeightUnit');
+
+    function updateHeightPlaceholder() {
+      if (!heightInput || !heightUnit) {
+        return;
+      }
+      heightInput.placeholder = heightUnit.value === 'ft' ? '5\'6" or 5.6' : '170';
+    }
+
+    if (heightUnit) {
+      heightUnit.addEventListener('change', updateHeightPlaceholder);
+      updateHeightPlaceholder();
+    }
+  }
+
   function handleSearch(event) {
     event.preventDefault();
     loadDashboard(byId('memberSearchInput').value.trim());
@@ -667,6 +684,7 @@
     closeGymQrModal();
     closeMemberEditModal();
     bindPasswordToggles();
+    bindUnitHints();
 
     if (byId('memberSearchForm')) {
       byId('memberSearchForm').addEventListener('submit', handleSearch);
