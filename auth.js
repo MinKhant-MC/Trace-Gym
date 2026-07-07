@@ -162,18 +162,11 @@
         saveSession(data);
         setMessage('loginMessage', t('login.success'), 'is-success');
         if ((data.role || role) === 'member' && api.getMemberDashboard) {
-          setMessage('loginMessage', t('login.downloading_data'), 'is-warning');
-          return api.getMemberDashboard(getSession())
+          api.getMemberDashboard(getSession())
             .then(function (dashboard) {
               saveMemberDashboardCache(getSession(), dashboard);
             })
-            .catch(function (error) {
-              clearSession();
-              throw error;
-            })
-            .then(function () {
-              redirectForRole(data.role || role);
-            });
+            .catch(function () {});
         }
         redirectForRole(data.role || role);
         return null;
