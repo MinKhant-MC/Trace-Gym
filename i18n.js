@@ -205,6 +205,8 @@
         edit_member_title: 'Edit Member',
         edit_member_text: 'Update member information and membership details.',
         member_status: 'Status',
+        extend_months: 'Extend Membership',
+        new_password_optional: 'New Password (optional)',
         reset_password_to_nrc: 'Reset member password to NRC',
         saving_member: 'Saving member...',
         member_saved: 'Member information saved.',
