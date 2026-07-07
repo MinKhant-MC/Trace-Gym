@@ -28,6 +28,156 @@
   --panel-pad: 24px;
 }
 
+/* Focused mobile polish for the gym member/register flow. */
+.member-dashboard-page [data-i18n="common.register_another"] {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  .page-shell,
+  .dashboard-shell {
+    gap: 14px;
+    padding: 12px;
+  }
+
+  .brand-block,
+  .page-hero,
+  .side-panel,
+  .stat-card,
+  .glass-panel {
+    padding: 18px;
+  }
+
+  .glass-panel {
+    border-radius: 24px;
+  }
+
+  .member-dashboard-page .side-panel {
+    gap: 16px;
+  }
+
+  .member-dashboard-page .side-panel .brand-mark {
+    max-width: 220px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 21px;
+  }
+
+  .section-copy,
+  .muted-text,
+  .info-card p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 520px) {
+  .field input,
+  .field select,
+  .search-row input {
+    min-height: 48px;
+    border-radius: 16px;
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+
+  .field input[type="date"] {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 44px 12px 14px;
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .unit-input {
+    grid-template-columns: minmax(0, 1fr) 76px;
+    gap: 8px;
+  }
+
+  .weekly-dashboard-card .section-head {
+    gap: 12px;
+  }
+
+  .weekly-total-pill {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    text-align: left;
+  }
+
+  .modern-calorie-chart {
+    min-height: 230px;
+    padding: 16px;
+    border-radius: 22px;
+    gap: 14px;
+  }
+
+  .modern-chart-head {
+    align-items: center;
+  }
+
+  .modern-chart-head strong {
+    font-size: 34px;
+  }
+
+  .modern-chart-meta {
+    min-width: 78px;
+    padding: 9px 10px;
+  }
+
+  .modern-chart-bars {
+    min-height: 112px;
+    gap: 7px;
+    padding-inline: 0;
+  }
+
+  .modern-chart-bar {
+    height: 128px;
+    grid-template-rows: 18px 1fr auto;
+    gap: 5px;
+  }
+
+  .modern-chart-bar i {
+    width: 15px;
+  }
+
+  .modern-chart-bar b {
+    font-size: 9px;
+  }
+
+  .modern-chart-bar small {
+    font-size: 10px;
+  }
+
+  .scanner-video {
+    max-width: 100%;
+    min-height: 240px;
+    object-fit: cover;
+  }
+
+  .photo-capture-panel,
+  .workout-detail-grid {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .photo-preview-shell {
+    min-height: 180px;
+  }
+
+  .form-stack {
+    gap: 14px;
+  }
+
+  .page-shell > .glass-panel {
+    padding: 16px;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -1246,12 +1396,13 @@ html[lang="my"] .stat-card span {
 
   .field input[type="date"] {
     min-height: 52px;
-    padding-right: 12px;
-    font-size: 13px;
+    padding: 12px 44px 12px 14px;
+    font-size: 14px;
+    text-align: left;
   }
 
   .unit-input {
-    grid-template-columns: minmax(0, 1fr) 86px;
+    grid-template-columns: minmax(0, 1fr) 76px;
     gap: 8px;
   }
 
@@ -1281,32 +1432,53 @@ html[lang="my"] .stat-card span {
   }
 
   .modern-calorie-chart {
-    min-height: 250px;
-    padding: 18px;
-    border-radius: 24px;
+    min-height: 230px;
+    padding: 16px;
+    border-radius: 22px;
+    gap: 14px;
   }
 
   .modern-chart-meta {
-    min-width: 92px;
-    padding: 10px 12px;
+    min-width: 78px;
+    padding: 9px 10px;
+  }
+
+  .modern-chart-head {
+    align-items: center;
+  }
+
+  .modern-chart-head strong {
+    font-size: 34px;
   }
 
   .modern-chart-bars {
-    min-height: 128px;
-    gap: 8px;
+    min-height: 112px;
+    gap: 7px;
     padding-inline: 0;
   }
 
   .modern-chart-bar {
-    height: 144px;
+    height: 128px;
+    grid-template-rows: 18px 1fr auto;
+    gap: 5px;
   }
 
   .modern-chart-bar i {
-    width: 18px;
+    width: 15px;
   }
 
   .modern-chart-bar b {
+    font-size: 9px;
+  }
+
+  .modern-chart-bar small {
     font-size: 10px;
+  }
+
+  .scanner-video {
+    max-width: 100%;
+    min-height: 240px;
+    object-fit: cover;
   }
 
   .workout-log-card {
