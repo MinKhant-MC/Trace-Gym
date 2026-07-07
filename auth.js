@@ -167,8 +167,9 @@
             .then(function (dashboard) {
               saveMemberDashboardCache(getSession(), dashboard);
             })
-            .catch(function () {
-              return null;
+            .catch(function (error) {
+              clearSession();
+              throw error;
             })
             .then(function () {
               redirectForRole(data.role || role);
@@ -210,6 +211,24 @@
     });
   }
 
+  function bindPasswordToggles() {
+    document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var input = byId(button.getAttribute('data-toggle-password'));
+        var visible;
+
+        if (!input) {
+          return;
+        }
+
+        visible = input.type === 'text';
+        input.type = visible ? 'password' : 'text';
+        button.classList.toggle('is-visible', !visible);
+        button.setAttribute('aria-label', visible ? 'Show password' : 'Hide password');
+      });
+    });
+  }
+
   function init() {
     var page = pageName();
     var form = byId('loginForm');
@@ -221,6 +240,7 @@
 
     if (form) {
       bindRoleToggle();
+      bindPasswordToggles();
       form.addEventListener('submit', handleLogin);
     }
 
