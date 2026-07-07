@@ -8,6 +8,7 @@
   var zxingReader = null;
   var scannerControls = null;
   var dashboardData = null;
+  var scannerLocked = false;
   var currentSearchQuery = '';
   var currentSearchResults = {};
   var dashboardRefreshTimer = null;
@@ -419,8 +420,10 @@
     setFieldValue('editAge', member.age);
     setFieldValue('editStartDate', String(member.start_date || '').substring(0, 10));
     setFieldValue('editMonths', member.membership_months);
+    setFieldValue('editExtendMonths', 0);
     setFieldValue('editTrainer', member.personal_trainer || 'No');
     setFieldValue('editGoalNote', member.goal_note);
+    setFieldValue('editNewPassword', '');
 
     if (byId('editResetPassword')) {
       byId('editResetPassword').checked = false;
@@ -472,6 +475,7 @@
     }
 
     scannerControls = null;
+    scannerLocked = false;
 
     if (video) {
       video.pause();
@@ -489,6 +493,10 @@
   }
 
   function handleQrScan(code) {
+    if (scannerLocked) {
+      return;
+    }
+    scannerLocked = true;
     setMessage('scannerMessage', t('admin.recording_attendance'), 'is-warning');
 
     api.recordAttendanceByQr(session(), code)
@@ -498,12 +506,68 @@
         return loadDashboard();
       })
       .catch(function (error) {
+        scannerLocked = false;
         setMessage('scannerMessage', error && error.message ? error.message : t('admin.scan_failed'), 'is-danger');
       });
   }
 
+  function startCameraDecode(video, onResult) {
+    var constraintsList = [
+      {
+        video: {
+          facingMode: { exact: 'environment' },
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: false
+      },
+      {
+        video: {
+          facingMode: { ideal: 'environment' },
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: false
+      },
+      {
+        video: true,
+        audio: false
+      }
+    ];
+
+    function tryConstraint(index) {
+      if (index >= constraintsList.length) {
+        return Promise.reject(new Error(t('admin.camera_failed')));
+      }
+
+      return zxingReader.decodeFromConstraints(constraintsList[index], video, function (result) {
+        var code = result && typeof result.getText === 'function' ? result.getText() : '';
+        if (code) {
+          onResult(code);
+        }
+      }).catch(function (error) {
+        if (index + 1 < constraintsList.length) {
+          return tryConstraint(index + 1);
+        }
+        throw error;
+      });
+    }
+
+    return tryConstraint(0);
+  }
+
   function startScanner() {
     var video = byId('scannerVideo');
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setMessage('scannerMessage', t('admin.camera_failed'), 'is-danger');
+      return;
+    }
+
+    if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+      setMessage('scannerMessage', 'Camera needs HTTPS on mobile. Open the hosted https:// website.', 'is-danger');
+      return;
+    }
 
     if (!window.ZXingBrowser || !window.ZXingBrowser.BrowserMultiFormatReader) {
       setMessage('scannerMessage', t('admin.scanner_unavailable'), 'is-danger');
@@ -516,24 +580,31 @@
     video.muted = true;
     byId('startScannerButton').hidden = true;
     byId('stopScannerButton').hidden = false;
+    scannerLocked = false;
     setMessage('scannerMessage', t('admin.scanner_starting'), 'is-warning');
 
-    zxingReader.decodeFromConstraints({
-      video: {
-        facingMode: { ideal: 'environment' }
-      },
-      audio: false
-    }, video, function (result) {
-      var code = result && typeof result.getText === 'function' ? result.getText() : '';
-      if (code) {
-        handleQrScan(code);
-      }
-    }).then(function (controls) {
+    startCameraDecode(video, handleQrScan).then(function (controls) {
       scannerControls = controls;
       setMessage('scannerMessage', t('admin.scanner_ready'), 'is-success');
     }).catch(function (error) {
       stopScanner();
       setMessage('scannerMessage', mapCameraError(error), 'is-danger');
+    });
+  }
+
+  function bindPasswordToggles() {
+    document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var input = byId(button.getAttribute('data-toggle-password'));
+        var visible;
+        if (!input) {
+          return;
+        }
+        visible = input.type === 'text';
+        input.type = visible ? 'password' : 'text';
+        button.classList.toggle('is-visible', !visible);
+        button.setAttribute('aria-label', visible ? 'Show password' : 'Hide password');
+      });
     });
   }
 
@@ -560,8 +631,10 @@
       age: byId('editAge').value,
       start_date: byId('editStartDate').value,
       membership_months: byId('editMonths').value,
+      extend_months: byId('editExtendMonths') ? byId('editExtendMonths').value : '',
       personal_trainer: byId('editTrainer').value,
       goal_note: byId('editGoalNote').value.trim(),
+      new_password: byId('editNewPassword') ? byId('editNewPassword').value.trim() : '',
       reset_password_to_nrc: byId('editResetPassword') && byId('editResetPassword').checked ? 'true' : ''
     };
 
@@ -593,6 +666,7 @@
 
     closeGymQrModal();
     closeMemberEditModal();
+    bindPasswordToggles();
 
     if (byId('memberSearchForm')) {
       byId('memberSearchForm').addEventListener('submit', handleSearch);
