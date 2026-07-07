@@ -252,6 +252,23 @@
     });
   }
 
+  function bindUnitHints() {
+    var heightInput = byId('heightCm');
+    var heightUnit = byId('heightUnit');
+
+    function updateHeightPlaceholder() {
+      if (!heightInput || !heightUnit) {
+        return;
+      }
+      heightInput.placeholder = heightUnit.value === 'ft' ? '5\'6" or 5.6' : '170';
+    }
+
+    if (heightUnit) {
+      heightUnit.addEventListener('change', updateHeightPlaceholder);
+      updateHeightPlaceholder();
+    }
+  }
+
   function handleSubmit(event) {
     var payload = collectForm();
     var button = byId('registerButton');
@@ -306,6 +323,7 @@
     }
 
     bindPasswordToggles();
+    bindUnitHints();
 
     if (byId('photoUpload')) {
       byId('photoUpload').addEventListener('change', handleFileChange);
