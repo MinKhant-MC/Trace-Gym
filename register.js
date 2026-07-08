@@ -5,7 +5,6 @@
   var common = window.GYM_COMMON || {};
   var i18n = window.GYM_I18N || {};
   var photoDataUrl = '';
-  var cameraStream = null;
 
   function byId(id) { return common.byId(id); }
   function setMessage(id, message, type) { return common.setMessage(id, message, type); }
@@ -78,22 +77,6 @@
   }
 
   function stopCamera() {
-    var video = byId('photoCameraPreview');
-
-    if (cameraStream) {
-      cameraStream.getTracks().forEach(function (track) { track.stop(); });
-      cameraStream = null;
-    }
-
-    if (video) {
-      video.pause();
-      video.srcObject = null;
-      video.hidden = true;
-    }
-
-    if (byId('capturePhotoButton')) {
-      byId('capturePhotoButton').hidden = true;
-    }
   }
 
   function setPreview(dataUrl) {
@@ -180,58 +163,6 @@
     if (byId('photoUpload')) {
       byId('photoUpload').click();
     }
-  }
-
-  function startCamera() {
-    var video = byId('photoCameraPreview');
-
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setMessage('photoMessage', t('register.camera_not_supported'), 'is-danger');
-      return;
-    }
-
-    navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: 'user',
-        width: { ideal: 1280 },
-        height: { ideal: 720 }
-      },
-      audio: false
-    }).then(function (stream) {
-      cameraStream = stream;
-      if (video) {
-        video.srcObject = stream;
-        video.hidden = false;
-        video.setAttribute('playsinline', 'true');
-        video.muted = true;
-        video.play();
-      }
-      if (byId('capturePhotoButton')) {
-        byId('capturePhotoButton').hidden = false;
-      }
-      setMessage('photoMessage', t('register.camera_ready'), 'is-success');
-    }).catch(function () {
-      setMessage('photoMessage', t('register.camera_failed'), 'is-danger');
-    });
-  }
-
-  function capturePhoto() {
-    var video = byId('photoCameraPreview');
-
-    if (!video || video.hidden) {
-      setMessage('photoMessage', t('register.open_camera_first'), 'is-warning');
-      return;
-    }
-
-    drawToSizedCanvas(video, function (dataUrl) {
-      if (!dataUrl) {
-        setMessage('photoMessage', t('register.photo_failed'), 'is-danger');
-        return;
-      }
-      setPreview(dataUrl);
-      stopCamera();
-      setMessage('photoMessage', t('register.photo_ready'), 'is-success');
-    });
   }
 
   function bindPasswordToggles() {
@@ -333,22 +264,12 @@
       byId('choosePhotoButton').addEventListener('click', openPhotoPicker);
     }
 
-    if (byId('startCameraButton')) {
-      byId('startCameraButton').addEventListener('click', startCamera);
-    }
-
-    if (byId('capturePhotoButton')) {
-      byId('capturePhotoButton').addEventListener('click', capturePhoto);
-    }
-
     if (byId('retakePhotoButton')) {
       byId('retakePhotoButton').addEventListener('click', function () {
         setPreview('');
-        startCamera();
+        openPhotoPicker();
       });
     }
-
-    window.addEventListener('beforeunload', stopCamera);
   }
 
   if (document.readyState === 'loading') {
