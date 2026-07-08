@@ -70,6 +70,9 @@
             <h2 data-i18n="admin.monthly_income_title">Monthly Membership Fees</h2>
             <p class="section-copy" data-i18n="admin.monthly_income_text">Approved membership fee revenue by month</p>
           </div>
+          <button id="viewPaymentsButton" class="ghost-button circle-action" type="button" aria-label="View fee history" data-i18n-title="admin.view_all">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
+          </button>
           <div class="fee-summary-pills">
             <div class="weekly-total-pill">
               <span data-i18n="admin.month_fee">This Month</span>
@@ -82,6 +85,19 @@
           </div>
         </div>
         <div id="adminIncomeChart" class="admin-income-chart"></div>
+      </section>
+
+      <section class="glass-panel">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="admin.payment_history_title">Membership Fee History</h2>
+            <p class="section-copy" data-i18n="admin.payment_history_text">Registration and extension payments by member.</p>
+          </div>
+          <button id="viewPaymentHistoryButton" class="ghost-button circle-action" type="button" aria-label="View all payments" data-i18n-title="admin.view_all">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
+          </button>
+        </div>
+        <div id="paymentHistoryList" class="list-stack compact-list"></div>
       </section>
 
       <section class="content-grid">
@@ -116,6 +132,9 @@
               <h2 data-i18n="admin.notifications_title">System Notifications</h2>
               <p class="section-copy" data-i18n="admin.notifications_text">Membership expiry alerts for admin</p>
             </div>
+            <button id="viewNotificationsButton" class="ghost-button circle-action" type="button" aria-label="View notifications" data-i18n-title="admin.view_all">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
+            </button>
           </div>
           <div id="adminNotifications" class="list-stack"></div>
         </article>
@@ -127,6 +146,9 @@
             <h2 data-i18n="admin.pending_title">Pending Registrations</h2>
             <p class="section-copy" data-i18n="admin.pending_text">Approve members before they can enter the system</p>
           </div>
+          <button id="viewPendingButton" class="ghost-button circle-action" type="button" aria-label="View pending registrations" data-i18n-title="admin.view_all">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
+          </button>
         </div>
         <div id="pendingRegistrations" class="list-stack"></div>
       </section>
@@ -137,6 +159,9 @@
             <h2 data-i18n="admin.attendance_title">Today's Attendance</h2>
             <p class="section-copy" data-i18n="admin.attendance_text">Members scanned into the gym today</p>
           </div>
+          <button id="viewAttendanceButton" class="ghost-button circle-action" type="button" aria-label="View attendance" data-i18n-title="admin.view_all">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
+          </button>
         </div>
         <div id="todayAttendance" class="list-stack"></div>
       </section>
@@ -147,6 +172,9 @@
             <h2 data-i18n="admin.all_members_title">All Members</h2>
             <p class="section-copy" data-i18n="admin.all_members_text">All approved members in this gym.</p>
           </div>
+          <button id="viewAllMembersButton" class="ghost-button circle-action" type="button" aria-label="View all members" data-i18n-title="admin.view_all">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
+          </button>
         </div>
         <div id="allMembersList" class="list-stack"></div>
       </section>
@@ -157,6 +185,9 @@
             <h2 data-i18n="admin.search_title">Search Members</h2>
             <p class="section-copy" data-i18n="admin.search_text">Search by member name or phone number</p>
           </div>
+          <button id="viewSearchButton" class="ghost-button circle-action" type="button" aria-label="View search results" data-i18n-title="admin.view_all">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
+          </button>
         </div>
         <form id="memberSearchForm" class="search-row">
           <input id="memberSearchInput" type="search" data-i18n-placeholder="admin.search_placeholder" placeholder="Search by name or phone">
@@ -276,12 +307,16 @@
           <input id="editMonths" type="number" min="1" required>
         </div>
         <div class="field">
-          <label for="editIncome" data-i18n="register.membership_fee">Membership Fee</label>
-          <input id="editIncome" type="number" min="0" step="100" inputmode="decimal">
+          <label for="editIncome" data-i18n="admin.member_fee_total">Total Membership Fee</label>
+          <input id="editIncome" type="number" min="0" step="100" inputmode="decimal" readonly>
         </div>
         <div class="field">
           <label for="editExtendMonths" data-i18n="admin.extend_months">Extend Membership</label>
           <input id="editExtendMonths" type="number" min="0" max="60" value="0" inputmode="numeric">
+        </div>
+        <div class="field">
+          <label for="editExtensionFee" data-i18n="admin.extension_fee">Extension Fee</label>
+          <input id="editExtensionFee" type="number" min="0" step="100" inputmode="decimal" placeholder="50000">
         </div>
         <div class="field">
           <label for="editTrainer" data-i18n="register.personal_trainer">Personal Trainer</label>
