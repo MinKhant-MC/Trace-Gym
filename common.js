@@ -159,6 +159,42 @@
     container.appendChild(image);
   }
 
+  function ensureLoadingOverlay() {
+    var overlay = byId('appLoadingOverlay');
+    if (overlay) {
+      return overlay;
+    }
+    overlay = document.createElement('div');
+    overlay.id = 'appLoadingOverlay';
+    overlay.className = 'app-loading-overlay';
+    overlay.hidden = true;
+    overlay.innerHTML =
+      '<div class="gold-loader" role="status" aria-live="polite">' +
+        '<span class="gold-loader-ring"></span>' +
+        '<strong id="appLoadingText">Loading...</strong>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+
+  function showLoading(message) {
+    var overlay = ensureLoadingOverlay();
+    setText('appLoadingText', message || 'Loading...');
+    overlay.hidden = false;
+    overlay.classList.add('is-open');
+    document.body.classList.add('is-loading');
+  }
+
+  function hideLoading() {
+    var overlay = byId('appLoadingOverlay');
+    if (!overlay) {
+      return;
+    }
+    overlay.classList.remove('is-open');
+    overlay.hidden = true;
+    document.body.classList.remove('is-loading');
+  }
+
   window.GYM_COMMON = {
     byId: byId,
     setText: setText,
@@ -168,6 +204,8 @@
     formatDate: formatDate,
     daysLeft: daysLeft,
     translateValue: translateValue,
-    renderQr: renderQr
+    renderQr: renderQr,
+    showLoading: showLoading,
+    hideLoading: hideLoading
   };
 })();
