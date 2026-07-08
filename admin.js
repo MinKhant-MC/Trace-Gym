@@ -123,6 +123,25 @@
     return auth.getSession();
   }
 
+  function adminCacheKey() {
+    var data = session() || {};
+    return 'gym_admin_dashboard_' + (data.user_id || 'default');
+  }
+
+  function loadAdminCache() {
+    try {
+      return JSON.parse(localStorage.getItem(adminCacheKey()) || 'null');
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function saveAdminCache(data) {
+    try {
+      localStorage.setItem(adminCacheKey(), JSON.stringify(data));
+    } catch (error) {}
+  }
+
   function normalizeList(value) {
     return Array.isArray(value) ? value : [];
   }
@@ -156,8 +175,10 @@
         total_members: Number(stats.total_members || payload.total_members || 0),
         pending_count: Number(stats.pending_count || payload.pending_count || 0),
         present_today: Number(stats.present_today || payload.present_today || 0),
-        expiring_soon: Number(stats.expiring_soon || payload.expiring_soon || 0)
+        expiring_soon: Number(stats.expiring_soon || payload.expiring_soon || 0),
+        total_income: Number(stats.total_income || payload.total_income || 0)
       },
+      monthly_income: normalizeList(payload.monthly_income || payload.monthlyIncome),
       notifications: normalizeList(payload.notifications || payload.alerts),
       pending_registrations: normalizeList(payload.pending_registrations || payload.pending || payload.registrations),
       today_attendance: normalizeList(payload.today_attendance || payload.attendance || payload.present_members),
@@ -184,20 +205,29 @@
       if (item.member_id) {
         currentSearchResults[item.member_id] = item;
       }
-      card.className = 'info-card';
+      card.className = 'info-card member-card-row';
       card.innerHTML =
-        '<strong>' + escapeHtml(item.full_name || '-') + '</strong>' +
-        '<p>' + t('admin.member_line', {
-          phone: escapeHtml(item.phone || '-'),
-          gender: translateValue(item.gender || ''),
-          memberId: escapeHtml(item.member_id || '-')
-        }) + '</p>' +
-        '<span>' + t('admin.member_ends', {
-          date: formatDate(item.end_date),
-          days: formatNumber(daysLeft(item.end_date))
-        }) + '</span>' +
-        '<div class="inline-actions">' +
-          '<button class="secondary-button small" type="button" data-edit-member="' + escapeHtml(item.member_id || '') + '">' + t('admin.edit_member') + '</button>' +
+        '<div class="member-card-photo-wrap">' +
+          (item.photo_data
+            ? '<img class="member-card-photo" src="' + escapeHtml(item.photo_data) + '" alt="">'
+            : '<div class="member-card-photo is-empty">' + escapeHtml((item.full_name || '?').charAt(0)) + '</div>') +
+        '</div>' +
+        '<div class="member-card-body">' +
+          '<strong>' + escapeHtml(item.full_name || '-') + '</strong>' +
+          '<p>' + t('admin.member_line', {
+            phone: escapeHtml(item.phone || '-'),
+            gender: translateValue(item.gender || ''),
+            memberId: escapeHtml(item.member_id || '-')
+          }) + '</p>' +
+          '<span>' + t('admin.member_ends', {
+            date: formatDate(item.end_date),
+            days: formatNumber(daysLeft(item.end_date))
+          }) + '</span>' +
+          '<div class="inline-actions">' +
+            '<button class="secondary-button small icon-text-button" type="button" data-edit-member="' + escapeHtml(item.member_id || '') + '">' +
+              '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2.1 12s3.2-6 9.9-6 9.9 6 9.9 6-3.2 6-9.9 6-9.9-6-9.9-6Z"/><circle cx="12" cy="12" r="3"/></svg><span>' + t('admin.view_member') + '</span>' +
+            '</button>' +
+          '</div>' +
         '</div>';
       container.appendChild(card);
     });
@@ -207,6 +237,51 @@
         openMemberEditModal(button.getAttribute('data-edit-member'));
       });
     });
+  }
+
+  function openQuickView(title, rows) {
+    var modal = byId('quickViewModal');
+    var body;
+
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'quickViewModal';
+      modal.className = 'modal-overlay';
+      modal.hidden = true;
+      modal.innerHTML =
+        '<section class="glass-panel modal-panel">' +
+          '<div class="modal-head">' +
+            '<div><h2 id="quickViewTitle"></h2></div>' +
+            '<button id="quickViewClose" class="icon-button" type="button" aria-label="Close">×</button>' +
+          '</div>' +
+          '<div id="quickViewBody" class="quick-view-body"></div>' +
+        '</section>';
+      document.body.appendChild(modal);
+      byId('quickViewClose').addEventListener('click', closeQuickView);
+      modal.addEventListener('click', function (event) {
+        if (event.target === modal) {
+          closeQuickView();
+        }
+      });
+    }
+
+    setText('quickViewTitle', title);
+    body = byId('quickViewBody');
+    body.innerHTML = rows.map(function (row) {
+      return '<div class="quick-view-row"><span>' + escapeHtml(row.label) + '</span><strong>' + escapeHtml(row.value || '-') + '</strong></div>';
+    }).join('');
+    modal.classList.add('is-open');
+    modal.hidden = false;
+    document.body.classList.add('is-modal-open');
+  }
+
+  function closeQuickView() {
+    var modal = byId('quickViewModal');
+    if (modal) {
+      modal.classList.remove('is-open');
+      modal.hidden = true;
+    }
+    document.body.classList.remove('is-modal-open');
   }
 
   function renderNotifications(list) {
@@ -257,10 +332,26 @@
           trainer: translateValue(item.personal_trainer || 'No')
         }) + '</span>' +
         '<div class="inline-actions">' +
+        '<button class="secondary-button small icon-text-button" data-view-pending="' + item.registration_id + '"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2.1 12s3.2-6 9.9-6 9.9 6 9.9 6-3.2 6-9.9 6-9.9-6-9.9-6Z"/><circle cx="12" cy="12" r="3"/></svg><span>' + t('admin.view_member') + '</span></button>' +
         '<button class="primary-button small" data-approve="' + item.registration_id + '">' + t('admin.approve') + '</button>' +
         '<button class="secondary-button small" data-reject="' + item.registration_id + '">' + t('admin.reject') + '</button>' +
         '</div>';
       container.appendChild(card);
+    });
+
+    container.querySelectorAll('[data-view-pending]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var id = button.getAttribute('data-view-pending');
+        var item = list.filter(function (row) { return row.registration_id === id; })[0] || {};
+        openQuickView(item.full_name || t('admin.pending_title'), [
+          { label: 'Phone', value: item.phone },
+          { label: 'NRC', value: item.nrc },
+          { label: 'Gender', value: translateValue(item.gender || '') },
+          { label: 'Membership Fee', value: formatNumber(item.membership_fee) },
+          { label: 'Start Date', value: formatDate(item.start_date) },
+          { label: 'Months', value: formatNumber(item.membership_months) }
+        ]);
+      });
     });
 
     container.querySelectorAll('[data-approve]').forEach(function (button) {
@@ -304,9 +395,58 @@
       card.innerHTML =
         '<strong>' + item.full_name + '</strong>' +
         '<p>' + item.phone + '</p>' +
-        '<span>' + t('admin.scan_time', { time: item.scan_time }) + '</span>';
+        '<span>' + t('admin.scan_time', { time: item.scan_time }) + '</span>' +
+        '<div class="inline-actions">' +
+          '<button class="secondary-button small icon-text-button" data-view-attendance="' + escapeHtml(item.attendance_id || '') + '"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2.1 12s3.2-6 9.9-6 9.9 6 9.9 6-3.2 6-9.9 6-9.9-6-9.9-6Z"/><circle cx="12" cy="12" r="3"/></svg><span>' + t('admin.view_member') + '</span></button>' +
+        '</div>';
       container.appendChild(card);
     });
+
+    container.querySelectorAll('[data-view-attendance]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var id = button.getAttribute('data-view-attendance');
+        var item = list.filter(function (row) { return row.attendance_id === id; })[0] || {};
+        openQuickView(item.full_name || t('admin.attendance_title'), [
+          { label: 'Member ID', value: item.member_id },
+          { label: 'Phone', value: item.phone },
+          { label: 'Scan Date', value: item.scan_date },
+          { label: 'Scan Time', value: item.scan_time },
+          { label: 'Status', value: translateValue(item.status || '') }
+        ]);
+      });
+    });
+  }
+
+  function renderMonthlyIncomeChart(list) {
+    var container = byId('adminIncomeChart');
+    var total = 0;
+    var max = 0;
+
+    if (!container) {
+      return;
+    }
+
+    list = normalizeList(list);
+    list.forEach(function (item) {
+      total += Number(item.amount || 0);
+      max = Math.max(max, Number(item.amount || 0));
+    });
+    setText('adminTotalIncome', formatNumber(total));
+
+    if (!list.length) {
+      container.innerHTML = '<div class="info-card empty-state">' + t('admin.no_income') + '</div>';
+      return;
+    }
+
+    container.innerHTML = list.map(function (item) {
+      var value = Number(item.amount || 0);
+      var height = max > 0 ? Math.max(8, Math.round((value / max) * 100)) : 8;
+      return '<div class="income-bar-item">' +
+        '<div class="income-bar-track"><span style="height:' + height + '%"></span></div>' +
+        '<strong>' + escapeHtml(item.label || '') + '</strong>' +
+        '<small>' + formatNumber(value) + '</small>' +
+      '</div>';
+    }).join('');
   }
 
   function renderSearchResults(list, query) {
@@ -321,11 +461,13 @@
     var normalized = normalizeDashboardData(data);
 
     dashboardData = normalized;
+    saveAdminCache(data);
     setText('adminSummaryText', t('admin.summary'));
     setText('totalMembers', formatNumber(normalized.stats.total_members));
     setText('pendingCount', formatNumber(normalized.stats.pending_count));
     setText('presentToday', formatNumber(normalized.stats.present_today));
     setText('expiringCount', formatNumber(normalized.stats.expiring_soon));
+    renderMonthlyIncomeChart(normalized.monthly_income);
     renderNotifications(normalized.notifications);
     renderPending(normalized.pending_registrations);
     renderAttendance(normalized.today_attendance);
@@ -343,6 +485,12 @@
 
   function loadDashboard(query) {
     currentSearchQuery = query || '';
+    if (!currentSearchQuery && !dashboardData) {
+      var cached = loadAdminCache();
+      if (cached) {
+        renderDashboard(cached);
+      }
+    }
     return api.getAdminDashboard(session(), query || '')
       .then(function (data) {
         renderDashboard(data);
@@ -420,6 +568,7 @@
     setFieldValue('editAge', member.age);
     setFieldValue('editStartDate', String(member.start_date || '').substring(0, 10));
     setFieldValue('editMonths', member.membership_months);
+    setFieldValue('editIncome', member.membership_fee);
     setFieldValue('editExtendMonths', 0);
     setFieldValue('editTrainer', member.personal_trainer || 'No');
     setFieldValue('editGoalNote', member.goal_note);
@@ -427,6 +576,21 @@
 
     if (byId('editResetPassword')) {
       byId('editResetPassword').checked = false;
+    }
+    if (byId('editMemberPhotoName')) {
+      setText('editMemberPhotoName', member.full_name || member.member_id || 'Member');
+    }
+    if (byId('editMemberExpireAlert')) {
+      var left = daysLeft(member.end_date);
+      setText('editMemberExpireAlert', left <= 7 ? t('admin.member_expire_alert', { days: formatNumber(left) }) : '');
+    }
+    if (byId('editMemberPhoto')) {
+      if (member.photo_data) {
+        byId('editMemberPhoto').src = member.photo_data;
+        byId('editMemberPhoto').hidden = false;
+      } else {
+        byId('editMemberPhoto').hidden = true;
+      }
     }
 
     setMessage('memberEditMessage', '', '');
@@ -648,6 +812,7 @@
       age: byId('editAge').value,
       start_date: byId('editStartDate').value,
       membership_months: byId('editMonths').value,
+      membership_fee: byId('editIncome') ? byId('editIncome').value : '',
       extend_months: byId('editExtendMonths') ? byId('editExtendMonths').value : '',
       personal_trainer: byId('editTrainer').value,
       goal_note: byId('editGoalNote').value.trim(),
@@ -734,6 +899,7 @@
       if (event.key === 'Escape') {
         closeGymQrModal();
         closeMemberEditModal();
+        closeQuickView();
       }
     });
 
