@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.qrserver.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <title>Trace Gym</title>
+  <meta name="theme-color" content="#15130f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="assets/trace-gym-logo.png">
+  <link rel="apple-touch-icon" href="assets/trace-gym-logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page gym-bg" data-page="login">
+  <main class="auth-shell">
+    <section class="glass-panel auth-card">
+      <div class="brand-block">
+        <div class="panel-topline">
+          <div class="brand-mark">
+            <img class="brand-logo-image" src="assets/trace-gym-logo.png" alt="Trace Gym logo">
+          </div>
+          <div class="language-switcher" data-language-switcher>
+            <button class="is-active" type="button" data-lang="en">ENG</button>
+            <button type="button" data-lang="my">မြန်မာ</button>
+          </div>
+        </div>
+        <h1 data-i18n="login.title">Gym Membership System</h1>
+        <p data-i18n="login.subtitle">Admin and member access for registration, attendance, workouts, and membership tracking.</p>
+      </div>
+
+      <div class="role-toggle" id="loginRoleToggle">
+        <button class="is-active button-inline" type="button" data-role="member">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7 8a7 7 0 0 1 14 0"></path></svg>
+          <span data-i18n="login.member_role">Member Login</span>
+        </button>
+        <button class="button-inline" type="button" data-role="admin">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7l7-4Z"></path><path d="M9.5 12.5 11 14l3.5-4"></path></svg>
+          <span data-i18n="login.admin_role">Admin Login</span>
+        </button>
+      </div>
+
+      <form id="loginForm" class="form-stack">
+        <input id="loginRole" type="hidden" value="member">
+
+        <div class="field">
+          <label for="loginIdentifier" data-i18n="login.identifier_label">Phone / Username</label>
+          <input id="loginIdentifier" type="text" autocomplete="username" data-i18n-placeholder="login.placeholder_member_identifier" placeholder="09xxxxxxxxx" required>
+        </div>
+
+        <div class="field">
+          <label for="loginPassword" data-i18n="login.password_label">Password</label>
+          <div class="password-field">
+            <input id="loginPassword" type="password" autocomplete="current-password" data-i18n-placeholder="login.placeholder_member_password" placeholder="Member password" required>
+            <button class="password-toggle" type="button" data-toggle-password="loginPassword" aria-label="Show password">
+              <svg class="icon eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              <svg class="icon eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 2.4-4.8"></path><path d="M9.9 5.3A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.1 4.1"></path><path d="M6.1 6.7A17.2 17.2 0 0 0 2 12s3.5 7 10 7a10.9 10.9 0 0 0 4.2-.8"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <p id="loginMessage" class="form-message" aria-live="polite"></p>
+
+        <button id="loginButton" class="primary-button button-inline" type="submit">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5l7 7-7 7"></path><path d="M3 12h17"></path></svg>
+          <span data-i18n="login.button">Login</span>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <button id="installAppButton" class="secondary-button button-inline install-app-button" type="button" data-install-app hidden>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+          <span data-i18n="common.install_app">Install App</span>
+        </button>
+        <a class="secondary-button button-inline" href="register.html">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+          <span data-i18n="login.register_link">New Member Registration</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="i18n.js"></script>
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
+  <script src="pwa.js"></script>
+</body>
+</html>

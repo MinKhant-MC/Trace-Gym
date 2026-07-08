@@ -1,0 +1,31 @@
+{
+  "name": "Trace Gym",
+  "short_name": "Trace Gym",
+  "description": "Gym registration, membership, attendance, and workout dashboard.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070707",
+  "theme_color": "#15130f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/trace-gym-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Register Member",
+      "short_name": "Register",
+      "url": "./register.html"
+    },
+    {
+      "name": "Admin Dashboard",
+      "short_name": "Admin",
+      "url": "./admin.html"
+    }
+  ]
+}
