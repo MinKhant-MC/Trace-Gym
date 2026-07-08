@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg-dark: #060708;
   --bg-mid: #10100f;
   --bg-soft: #1a1a18;
@@ -99,8 +99,32 @@
   }
 
   .admin-income-chart {
-    grid-template-columns: repeat(12, 42px);
-    min-height: 210px;
+    grid-template-columns: repeat(12, minmax(22px, 1fr));
+    gap: 6px;
+    min-height: 170px;
+    padding: 12px;
+    overflow-x: hidden;
+  }
+
+  .admin-income-chart .income-bar-track {
+    height: 88px;
+  }
+
+  .admin-income-chart .income-bar-track span {
+    width: 10px;
+  }
+
+  .admin-income-chart .income-bar-item {
+    min-width: 0;
+    gap: 5px;
+  }
+
+  .admin-income-chart .income-bar-item strong {
+    font-size: 9px;
+  }
+
+  .admin-income-chart .income-bar-item small {
+    display: none;
   }
 }
 
@@ -110,7 +134,23 @@
   }
 
   .chart-empty-state {
-    min-height: 130px;
+    min-height: 104px;
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-income-chart {
+    min-height: 140px;
+    border-radius: 22px;
+  }
+
+  .admin-income-chart > .chart-empty-state {
+    min-height: 96px;
+    width: 100%;
   }
 }
 
