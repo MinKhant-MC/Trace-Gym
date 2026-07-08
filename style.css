@@ -178,6 +178,66 @@
   }
 }
 
+/* Final overflow/date fixes for mobile registration and member edit modal. */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  text-align: left !important;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+  min-width: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.modal-overlay {
+  overflow-x: hidden;
+}
+
+.modal-panel,
+.member-edit-panel,
+.qr-modal-panel {
+  max-width: min(100%, 960px);
+  min-width: 0;
+}
+
+.member-edit-panel .form-grid,
+.member-edit-panel .field,
+.member-edit-panel .field-span-2 {
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .modal-overlay {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .modal-panel,
+  .member-edit-panel,
+  .qr-modal-panel {
+    width: 100%;
+    max-width: calc(100vw - 20px);
+    margin: 0 auto;
+  }
+
+  .member-edit-panel .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .member-edit-panel input[type="date"],
+  .app-page[data-page="register"] input[type="date"] {
+    height: 50px;
+    padding: 12px 42px 12px 14px !important;
+    line-height: 1.2 !important;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -1572,5 +1632,66 @@ html[lang="my"] .stat-card span {
 
   .button-inline {
     white-space: normal;
+  }
+}
+
+/* Last mobile layout lock. Keep date fields and edit modal inside the viewport. */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  text-align: left !important;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+  min-width: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.modal-overlay {
+  overflow-x: hidden;
+}
+
+.modal-panel,
+.member-edit-panel,
+.qr-modal-panel {
+  max-width: min(100%, 960px);
+  min-width: 0;
+}
+
+.member-edit-panel .form-grid,
+.member-edit-panel .field,
+.member-edit-panel .field-span-2 {
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .modal-overlay {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .modal-panel,
+  .member-edit-panel,
+  .qr-modal-panel {
+    width: 100%;
+    max-width: calc(100vw - 20px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .member-edit-panel .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .member-edit-panel input[type="date"],
+  .app-page[data-page="register"] input[type="date"] {
+    height: 50px;
+    padding: 12px 42px 12px 14px !important;
+    line-height: 1.2 !important;
   }
 }
