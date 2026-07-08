@@ -99,19 +99,24 @@
   }
 
   .admin-income-chart {
-    grid-template-columns: repeat(12, minmax(22px, 1fr));
-    gap: 6px;
-    min-height: 170px;
-    padding: 12px;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 4px;
+    min-height: 168px;
+    padding: 18px 10px 12px;
     overflow-x: hidden;
   }
 
+  .admin-income-chart .income-bar-item {
+    height: 138px;
+    gap: 4px;
+  }
+
   .admin-income-chart .income-bar-track {
-    height: 88px;
+    height: 92px;
   }
 
   .admin-income-chart .income-bar-track span {
-    width: 10px;
+    width: 9px;
   }
 
   .admin-income-chart .income-bar-item {
@@ -120,11 +125,17 @@
   }
 
   .admin-income-chart .income-bar-item strong {
-    font-size: 9px;
+    font-size: 8px;
+    transform: rotate(-38deg);
+    transform-origin: center;
+    margin-top: 4px;
   }
 
   .admin-income-chart .income-bar-item small {
-    display: none;
+    font-size: 7px;
+    max-width: 26px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -144,7 +155,7 @@
 
 @media (max-width: 520px) {
   .admin-income-chart {
-    min-height: 140px;
+    min-height: 156px;
     border-radius: 22px;
   }
 
@@ -1408,18 +1419,21 @@ button:disabled {
 }
 
 .admin-income-chart {
-  min-height: 300px;
+  position: relative;
+  min-height: 238px;
   display: grid;
-  grid-template-columns: repeat(12, minmax(42px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(12, minmax(34px, 1fr));
+  gap: 10px;
   align-items: end;
-  padding: 22px;
-  border-radius: 26px;
+  padding: 26px 18px 18px;
+  border-radius: 24px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
-    linear-gradient(135deg, rgba(244, 207, 98, 0.08), rgba(255, 255, 255, 0.015)),
-    rgba(255, 255, 255, 0.04);
-  overflow-x: auto;
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.055) 1px, transparent 1px) 0 26px / 100% 38px,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.072), rgba(255, 255, 255, 0.03)),
+    linear-gradient(135deg, rgba(244, 207, 98, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  overflow: hidden;
 }
 
 .chart-empty-state {
@@ -1441,9 +1455,11 @@ button:disabled {
 }
 
 .income-bar-item {
-  min-width: 42px;
+  min-width: 0;
+  height: 190px;
   display: grid;
-  gap: 8px;
+  grid-template-rows: 1fr auto auto;
+  gap: 6px;
   justify-items: center;
   color: var(--muted);
   font-size: 11px;
@@ -1451,30 +1467,32 @@ button:disabled {
 
 .income-bar-track {
   width: 100%;
-  height: 170px;
+  height: 132px;
   display: flex;
   align-items: end;
   justify-content: center;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
   overflow: hidden;
 }
 
 .income-bar-track span {
-  width: 18px;
-  min-height: 8px;
+  width: min(18px, 54%);
+  min-height: 7px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #f9d96c, #b57415);
-  box-shadow: 0 12px 28px rgba(240, 202, 98, 0.28);
+  background: linear-gradient(180deg, #ffe887 0%, #f2be31 55%, #b87411 100%);
+  box-shadow: 0 8px 18px rgba(244, 207, 98, 0.24);
 }
 
 .income-bar-item strong {
   color: var(--text);
-  font-size: 12px;
+  font-size: 11px;
+  line-height: 1;
 }
 
 .income-bar-item small {
-  font-size: 10px;
+  color: var(--muted-soft);
+  font-size: 9px;
   white-space: nowrap;
 }
 
