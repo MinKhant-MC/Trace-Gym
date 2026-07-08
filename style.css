@@ -231,6 +231,42 @@ input[type="date"]::-webkit-date-and-time-value {
     padding: 12px 42px 12px 14px !important;
     line-height: 1.2 !important;
   }
+
+  .member-card-row {
+    grid-template-columns: 54px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .member-card-photo {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+  }
+
+  .member-detail-photo {
+    align-items: flex-start;
+  }
+
+  .member-detail-photo img {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+  }
+
+  .admin-income-chart {
+    grid-template-columns: repeat(12, 44px);
+    gap: 10px;
+    min-height: 220px;
+    padding: 14px;
+  }
+
+  .income-bar-track {
+    height: 128px;
+  }
+
+  .income-bar-track span {
+    width: 15px;
+  }
 }
 
 *,
@@ -1196,6 +1232,41 @@ button:disabled {
   color: var(--muted);
 }
 
+.photo-capture-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.member-detail-photo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.member-detail-photo img {
+  width: 92px;
+  height: 92px;
+  border-radius: 24px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.member-detail-photo strong,
+.member-detail-photo span {
+  display: block;
+}
+
+.member-expire-alert {
+  margin-top: 6px;
+  color: #ff9aa8;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .info-card {
   padding: 18px;
   border-radius: 20px;
@@ -1204,6 +1275,123 @@ button:disabled {
     var(--panel-lite);
   border: 1px solid rgba(255, 255, 255, 0.06);
   min-height: 94px;
+}
+
+.member-card-row {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+.member-card-photo {
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+  font-weight: 800;
+  background: rgba(240, 202, 98, 0.14);
+  border: 1px solid rgba(240, 202, 98, 0.18);
+}
+
+.member-card-body {
+  min-width: 0;
+}
+
+.icon-text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-text-button svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.admin-income-chart {
+  min-height: 260px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(42px, 1fr));
+  gap: 12px;
+  align-items: end;
+  padding: 18px;
+  border-radius: 26px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.04);
+  overflow-x: auto;
+}
+
+.income-bar-item {
+  min-width: 42px;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.income-bar-track {
+  width: 100%;
+  height: 170px;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.income-bar-track span {
+  width: 18px;
+  min-height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f9d96c, #b57415);
+  box-shadow: 0 12px 28px rgba(240, 202, 98, 0.28);
+}
+
+.income-bar-item strong {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.income-bar-item small {
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.quick-view-body {
+  display: grid;
+  gap: 10px;
+}
+
+.quick-view-row {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.8fr) minmax(0, 1.2fr);
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.quick-view-row span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.quick-view-row strong {
+  min-width: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
 }
 
 .info-card strong {
