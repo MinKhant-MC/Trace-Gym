@@ -1212,6 +1212,32 @@ button:disabled {
   margin-bottom: 18px;
 }
 
+.circle-action {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 15px;
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.022)),
+    rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.circle-action .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.circle-action:hover {
+  color: var(--gold);
+  border-color: rgba(240, 202, 98, 0.32);
+}
+
 .fee-summary-pills {
   display: flex;
   gap: 12px;
@@ -1378,6 +1404,26 @@ button:disabled {
     var(--panel-lite);
   border: 1px solid rgba(255, 255, 255, 0.06);
   min-height: 94px;
+}
+
+.payment-history-card {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+}
+
+.payment-history-card time {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+input[readonly] {
+  opacity: 0.78;
+  cursor: not-allowed;
 }
 
 .member-card-row {
