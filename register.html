@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.qrserver.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Trace Gym Registration</title>
   <meta name="theme-color" content="#111111">
@@ -113,6 +113,10 @@
             <input id="membershipMonths" type="number" min="1" max="24" value="1" required>
           </div>
           <div class="field">
+            <label for="incomeAmount" data-i18n="register.membership_fee">Membership Fee</label>
+            <input id="incomeAmount" type="number" min="0" step="100" inputmode="decimal" placeholder="50000" required>
+          </div>
+          <div class="field">
             <label for="personalTrainer" data-i18n="register.personal_trainer">Personal Trainer</label>
             <select id="personalTrainer" required>
               <option value="No" data-i18n="register.trainer_no">No</option>
@@ -122,6 +126,37 @@
           <div class="field">
             <label for="trainerNotes" data-i18n="register.goal_note">Fitness Goal / Note</label>
             <input id="trainerNotes" type="text" data-i18n-placeholder="register.goal_placeholder" placeholder="Weight loss, muscle gain, rehab, etc.">
+          </div>
+          <div class="field field-span-2">
+            <label data-i18n="register.photo">Member Photo</label>
+            <div class="photo-capture-panel">
+              <input id="photoUpload" type="file" accept="image/*" hidden>
+              <div class="inline-actions">
+                <button id="choosePhotoButton" class="secondary-button button-inline" type="button">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h4l2-2h2l2 2h4v12H5z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+                  <span data-i18n="register.choose_photo">Choose Photo</span>
+                </button>
+                <button id="startCameraButton" class="secondary-button button-inline" type="button">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 10l4.5-2.5v9L15 14"></path><rect x="3" y="6" width="12" height="12" rx="2"></rect></svg>
+                  <span data-i18n="register.open_camera">Open Camera</span>
+                </button>
+                <button id="capturePhotoButton" class="primary-button button-inline" type="button" hidden>
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle></svg>
+                  <span data-i18n="register.take_photo">Take Photo</span>
+                </button>
+                <button id="retakePhotoButton" class="ghost-button button-inline" type="button" hidden>
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6"></path><path d="M20 20v-6h-6"></path><path d="M20 8a8 8 0 0 0-13.66-2.34L4 8"></path><path d="M4 16a8 8 0 0 0 13.66 2.34L20 16"></path></svg>
+                  <span data-i18n="register.retake_photo">Retake</span>
+                </button>
+              </div>
+              <video id="photoCameraPreview" class="scanner-video" hidden playsinline muted></video>
+              <canvas id="photoCanvas" hidden></canvas>
+              <div class="photo-preview-shell">
+                <img id="photoPreview" class="photo-preview" alt="Member photo preview" hidden>
+                <div id="photoPlaceholder" class="photo-placeholder" data-i18n="register.photo_placeholder">No photo selected yet</div>
+              </div>
+              <p id="photoMessage" class="form-message" aria-live="polite"></p>
+            </div>
           </div>
         </div>
 
