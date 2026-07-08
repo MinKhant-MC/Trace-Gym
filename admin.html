@@ -110,21 +110,12 @@
           <div class="section-head">
             <div>
               <h2 data-i18n="admin.scanner_title">Member QR Check-In</h2>
-              <p class="section-copy" data-i18n="admin.scanner_text">Ask the member to show their QR code. This device reads it and records attendance.</p>
             </div>
           </div>
           <div class="scanner-tools">
-            <button id="startScannerButton" class="primary-button button-inline" type="button">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5h4"></path><path d="M20 9V5h-4"></path><path d="M4 15v4h4"></path><path d="M20 15v4h-4"></path><path d="M9 12h6"></path></svg>
-              <span data-i18n="common.start_scanner">Start Scanner</span>
-            </button>
             <button id="showGymQrButton" class="secondary-button button-inline" type="button">
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10H7z"></path><path d="M9.5 9.5h1"></path><path d="M13.5 9.5h1"></path><path d="M9.5 13.5h1"></path><path d="M13.5 13.5h1"></path></svg>
               <span data-i18n="admin.show_gym_qr">Show Gym QR</span>
-            </button>
-            <button id="stopScannerButton" class="secondary-button button-inline" type="button" hidden>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1"></rect></svg>
-              <span data-i18n="common.stop_scanner">Stop Scanner</span>
             </button>
           </div>
           <video id="scannerVideo" class="scanner-video" hidden playsinline muted></video>
