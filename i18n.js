@@ -171,6 +171,13 @@
         month_fee: 'This Month',
         year_fee: 'This Year',
         no_income: 'No membership fees recorded yet.',
+        payment_history_title: 'Membership Fee History',
+        payment_history_text: 'Registration and extension payments by member.',
+        no_payments: 'No fee records yet.',
+        payment_line: '{amount} | {months} month(s) | {type}',
+        payment_period: '{start} to {end}',
+        view_all: 'View all',
+        no_list_items: 'No records to show.',
         scanner_title: 'Member QR Check-In',
         scanner_text: 'Ask the member to show their QR code. This device reads it and records attendance.',
         notifications_title: 'System Notifications',
@@ -215,7 +222,9 @@
         edit_member_text: 'Update member information and membership details.',
         member_expire_alert: 'Expires in {days} day(s)',
         member_status: 'Status',
+        member_fee_total: 'Total Membership Fee',
         extend_months: 'Extend Membership',
+        extension_fee: 'Extension Fee',
         new_password_optional: 'New Password (optional)',
         reset_password_to_nrc: 'Reset member password to NRC',
         saving_member: 'Saving member...',
@@ -242,6 +251,9 @@
         male: 'Male',
         female: 'Female',
         other: 'Other'
+        ,
+        registration: 'Registration',
+        extension: 'Extension'
       }
     },
     my: {
@@ -281,8 +293,8 @@
         failed: 'ဝင်ရောက်မှု မအောင်မြင်ပါ။'
       },
       register: {
-        title: 'အဖွဲ့ဝင် စာရင်းသွင်းခြင်း',
-        subtitle: 'အဖွဲ့ဝင်အသစ်တွေကို ဒီမှာစာရင်းသွင်းပြီး စီမံခန့်ခွဲသူ အတည်ပြုပြီးမှ စနစ်ထဲ ဝင်လို့ရပါမယ်။',
+        title: 'မန်ဘာအသစ်တွေကို စာရင်းသွင်းရန်',
+        subtitle: '',
         name: 'အမည်',
         phone: 'ဖုန်းနံပါတ်',
         email_optional: 'အီးမေးလ် (မဖြည့်လည်းရ)',
@@ -297,12 +309,12 @@
         height: 'အရပ် (cm)',
         start_date: 'စတင်မည့်ရက်',
         months: 'ကစားမည့် လအရေအတွက်',
-        personal_trainer: 'ကိုယ်ပိုင် Trainer',
+        personal_trainer: 'Personal Trainer',
         trainer_no: 'မလိုပါ',
-        trainer_yes: 'လိုပါတယ်',
-        goal_note: 'ရည်မှန်းချက် / မှတ်ချက်',
-        goal_placeholder: 'အလေးချိန်လျှော့ချင်တယ်၊ ကြွက်သားတိုးချင်တယ် စသဖြင့်',
-        info_note: 'အတည်ပြုပြီးနောက် ဝင်ရောက်ရန် - ဖုန်းနံပါတ် + NRC',
+        trainer_yes: 'Yes',
+        goal_note: 'မှတ်ချက်',
+        goal_placeholder: 'အလေးချိန်လျှော့ချင်တယ်၊ ကြွက်သားတိုးချင်တယ်',
+        info_note: 'အတည်ပြုပြီးနောက် ဝင်ရောက်ရန် ဖုန်းနံပါတ် + Password မှတ်ထားပါ ',
         submit: 'စာရင်းသွင်းမယ်',
         submitting: 'စာရင်းသွင်းနေပါတယ်...',
         success: 'အတည်ပြုရန်အတွက် စာရင်းသွင်းပြီးပါပြီ။',
@@ -315,14 +327,14 @@
         loading_details: 'အဖွဲ့ဝင်အချက်အလက်တွေ တင်နေပါတယ်...',
         calories_today: 'ဒီနေ့ လောင်ကျွမ်းတဲ့ Calories',
         bmi: 'BMI',
-        membership_days_left: 'ကျန်သက်တမ်းရက်',
+        membership_days_left: 'လက်ကျန်ရက်',
         trainer_plan: 'Trainer အစီအစဉ်',
         qr_title: 'သင့် QR ကုတ်',
-        qr_text: 'ဂျင်ဝင်ပေါက်မှာ ဒီ QR ကုတ်ကို ပြပေးပါ',
+        qr_text: '',
         notifications_title: 'သတိပေးချက်များ',
-        notifications_text: 'သက်တမ်းကုန်ခါနီးတာတွေကို ဒီမှာပြပါမယ်',
+        notifications_text: 'သက်တမ်းကုန်ခါနီးပြီဆို ဒီမှာပြပါမယ်',
         workout_title: 'လေ့ကျင့်ခန်း မှတ်တမ်း',
-        workout_text: 'ဒီနေ့ လုပ်ထားတဲ့ လေ့ကျင့်ခန်းကို ရွေးပြီး သိမ်းပါ။',
+        workout_text: 'ဒီနေ့ လုပ်ထားတဲ့ လေ့ကျင့်ခန်းကိုပါ။',
         activity: 'လေ့ကျင့်ခန်းအမျိုးအစား',
         duration: 'ကြာချိန် (မိနစ်)',
         note: 'မှတ်ချက်',
@@ -338,11 +350,11 @@
         notification_expiring_message: 'သင့်အသင်းဝင်သက်တမ်း {days} ရက်အတွင်း ကုန်တော့မယ်။ အချိန်မီ သက်တမ်းတိုးပေးပါ။',
         notification_inactive_title: 'အကောင့် မလှုပ်ရှားသေးပါ',
         notification_inactive_message: 'သင့်အကောင့် မဖွင့်ရသေးပါ။ စီမံခန့်ခွဲသူကို ဆက်သွယ်ပါ။',
-        member_id: 'အဖွဲ့ဝင်နံပါတ်: {id}',
+        member_id: 'မန်ဘာနံပါတ်: {id}',
         status_active_until: 'သက်တမ်းကုန်မယ့်နေ့ {date} | အခြေအနေ {status}',
         cached_refreshing: 'ဒီစက်မှာ သိမ်းထားတဲ့ အချက်အလက်ကို အရင်ပြထားပါတယ်။ အသစ်ကို ပြန်ယူနေပါတယ်...',
         cached_only: 'ဒီနေ့အတွက် ဒီစက်ထဲက အချက်အလက်ကိုပဲ ပြထားပါတယ်။ အင်တာနက် sync မအောင်မြင်ပါ။',
-        dashboard_failed: 'အဖွဲ့ဝင်အချက်အလက် တင်မရပါ။',
+        dashboard_failed: 'မအောင်မြင်ပါ။',
         log_line: '{minutes} မိနစ် | {calories} calories',
         saving_workout: 'လေ့ကျင့်ခန်း သိမ်းနေပါတယ်...',
         workout_saved: 'လေ့ကျင့်ခန်း သိမ်းပြီးပါပြီ။',
@@ -357,18 +369,18 @@
         pending_count: 'အတည်ပြုရန် ကျန်သူများ',
         present_today: 'ဒီနေ့ ဝင်ထားသူ',
         expiring_count: 'သက်တမ်းကုန်ခါနီးသူ',
-        scanner_title: 'အဖွဲ့ဝင် QR ဖတ်ခြင်း',
-        scanner_text: 'အဖွဲ့ဝင်က သူ့ QR ကုတ်ကို ပြပေးပါမယ်။ ဒီစက်က ဖတ်ပြီး ဝင်ရောက်မှု မှတ်တမ်းတင်ပေးပါမယ်။',
+        scanner_title: 'မန်ဘာ QR ဖတ်ခြင်း',
+        scanner_text: '',
         notifications_title: 'သတိပေးချက်များ',
         notifications_text: 'သက်တမ်းကုန်ခါနီးသူတွေကို ဒီမှာပြပါမယ်',
         pending_title: 'စောင့်ဆိုင်းနေသော စာရင်းသွင်းမှုများ',
         pending_text: 'စနစ်ထဲ ဝင်ခွင့်ပေးခင် ဒီမှာ အတည်ပြုပေးပါ',
         attendance_title: 'ဒီနေ့ ဝင်ထားသူများ',
         attendance_text: 'ဒီနေ့ ဂျင်လာထားတဲ့ အဖွဲ့ဝင်တွေ',
-        search_title: 'အဖွဲ့ဝင် ရှာရန်',
+        search_title: 'မန်ဘာ ရှာရန်',
         search_text: 'အမည် ဒါမှမဟုတ် ဖုန်းနံပါတ်နဲ့ ရှာလို့ရပါတယ်',
         search_placeholder: 'အမည် သို့မဟုတ် ဖုန်းနံပါတ်နဲ့ ရှာရန်',
-        summary: 'အဖွဲ့ဝင်အရေအတွက်၊ အတည်ပြုရန်ကျန်တာ၊ ဒီနေ့ ဝင်ထားသူနဲ့ သက်တမ်းကုန်ခါနီးသူတွေကို ဒီမှာကြည့်နိုင်ပါတယ်။',
+        summary: 'ဝင်အရေအတွက်၊ အတည်ပြုရန်ကျန်တာ၊ ဒီနေ့ ဝင်ထားသူနဲ့ သက်တမ်းကုန်ခါနီးသူတွေကို ဒီမှာကြည့်နိုင်ပါတယ်။',
         no_alerts: 'အခုတော့ သတိပေးချက် မရှိသေးပါ။',
         no_pending: 'အတည်ပြုရန် စာရင်း မရှိသေးပါ။',
         no_attendance: 'ဒီနေ့ ဝင်ထားသူ မရှိသေးပါ။',
@@ -454,6 +466,15 @@
   DICTIONARIES.my.admin.month_fee = 'ဒီလ';
   DICTIONARIES.my.admin.year_fee = 'ဒီနှစ်';
   DICTIONARIES.my.admin.no_income = 'Membership fee မရှိသေးပါ။';
+  DICTIONARIES.my.admin.payment_history_title = 'ငွေပေးချေမှု မှတ်တမ်း';
+  DICTIONARIES.my.admin.payment_history_text = 'စာရင်းသွင်းချိန်နှင့် သက်တမ်းတိုးချိန် ပေးထားသော fee များ';
+  DICTIONARIES.my.admin.no_payments = 'ငွေပေးချေမှု မှတ်တမ်း မရှိသေးပါ။';
+  DICTIONARIES.my.admin.payment_line = '{amount} | {months} လ | {type}';
+  DICTIONARIES.my.admin.payment_period = '{start} မှ {end} အထိ';
+  DICTIONARIES.my.admin.view_all = 'အားလုံးကြည့်ရန်';
+  DICTIONARIES.my.admin.no_list_items = 'ပြရန် မှတ်တမ်း မရှိသေးပါ။';
+  DICTIONARIES.my.admin.member_fee_total = 'စုစုပေါင်း Membership Fee';
+  DICTIONARIES.my.admin.extension_fee = 'သက်တမ်းတိုး Fee';
   DICTIONARIES.my.admin.view_member = 'ကြည့်ရန်';
   DICTIONARIES.my.admin.member_expire_alert = 'သက်တမ်းကုန်ရန် {days} ရက်ကျန်';
   DICTIONARIES.my.admin.gym_qr_title = 'Gym ဝင်ပေါက် QR';
@@ -464,6 +485,8 @@
 
   DICTIONARIES.my.register.pending_notice = 'အခြေအနေ - Admin အတည်ပြုရန် စောင့်ဆိုင်းနေပါသည်။';
   DICTIONARIES.my.admin.no_gym_qr = 'Gym QR မပေါ်သေးပါ။ Apps Script ကို update ပြီး deploy ပြန်လုပ်ပြီး page ကို refresh လုပ်ပါ။';
+  DICTIONARIES.my.value.registration = 'စာရင်းသွင်း Fee';
+  DICTIONARIES.my.value.extension = 'သက်တမ်းတိုး Fee';
   DICTIONARIES.my.login.downloading_data = 'Dashboard အချက်အလက်တွေကို ဒီစက်ထဲ သိမ်းနေပါသည်...';
   DICTIONARIES.my.member.weekly_calories_title = '၇ ရက်စာ Calories';
   DICTIONARIES.my.member.weekly_calories_text = 'ပြီးခဲ့သော ၇ ရက်အတွင်း လောင်ကျွမ်းခဲ့သော calories ကို ပြထားပါသည်။ ၇ ရက်ကျော်သော workout မှတ်တမ်းများကို ဖျက်ပါမည်။';
@@ -497,7 +520,7 @@
   DICTIONARIES.my.member.reps = 'အကြိမ်ရေ';
   DICTIONARIES.my.member.sets = 'အကျော့';
   DICTIONARIES.my.member.speed_kmh = 'အမြန်နှုန်း (km/hr)';
-  DICTIONARIES.my.member.incline_percent = 'စောင်းနှုန်း %';
+  DICTIONARIES.my.member.incline_percent = 'incline %';
   DICTIONARIES.my.member.time_minutes = 'ကြာချိန် (မိနစ်)';
   DICTIONARIES.my.member.note_placeholder = 'Chest, shoulder, bicep, back စသဖြင့်';
 
