@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.qrserver.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Trace Gym Admin Dashboard</title>
   <meta name="theme-color" content="#111111">
@@ -61,6 +61,20 @@
           <span data-i18n="admin.expiring_count">Expiring Soon</span>
           <strong id="expiringCount">0</strong>
         </article>
+      </section>
+
+      <section class="glass-panel">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="admin.monthly_income_title">Monthly Membership Fees</h2>
+            <p class="section-copy" data-i18n="admin.monthly_income_text">Approved membership fee revenue by month</p>
+          </div>
+          <div class="weekly-total-pill">
+            <span data-i18n="admin.total_membership_fee">Total Membership Fee</span>
+            <strong id="adminTotalIncome">0</strong>
+          </div>
+        </div>
+        <div id="adminIncomeChart" class="admin-income-chart"></div>
       </section>
 
       <section class="content-grid">
@@ -183,6 +197,13 @@
       </div>
       <form id="memberEditForm" class="form-grid two-column">
         <input id="editMemberId" type="hidden">
+        <div class="member-detail-photo field-span-2">
+          <img id="editMemberPhoto" alt="Member photo" hidden>
+          <div>
+            <strong id="editMemberPhotoName">Member</strong>
+            <span id="editMemberExpireAlert" class="member-expire-alert"></span>
+          </div>
+        </div>
         <div class="field">
           <label for="editFullName" data-i18n="register.name">Name</label>
           <input id="editFullName" type="text" required>
@@ -246,6 +267,10 @@
         <div class="field">
           <label for="editMonths" data-i18n="register.months">How Many Months</label>
           <input id="editMonths" type="number" min="1" required>
+        </div>
+        <div class="field">
+          <label for="editIncome" data-i18n="register.membership_fee">Membership Fee</label>
+          <input id="editIncome" type="number" min="0" step="100" inputmode="decimal">
         </div>
         <div class="field">
           <label for="editExtendMonths" data-i18n="admin.extend_months">Extend Membership</label>
