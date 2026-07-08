@@ -13,13 +13,9 @@
   var availableActivities = [];
   var activityGroups = {};
   var activityCategoryOrder = [
-    '1 Chest',
-    '2 Back',
-    '3 Shoulders',
-    '4 Arms',
-    '5 Legs',
-    '6 Abs / Core',
-    '7 Cardio Machines'
+    '1 Cardio Machines',
+    '2 Strength Machines',
+    '3 Movement Exercises'
   ];
 
   function byId(id) { return common.byId(id); }
