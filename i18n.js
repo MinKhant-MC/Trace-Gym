@@ -61,6 +61,7 @@
         height: 'Height',
         start_date: 'Start Date',
         months: 'How Many Months',
+        membership_fee: 'Membership Fee',
         personal_trainer: 'Personal Trainer',
         trainer_no: 'No',
         trainer_yes: 'Yes',
@@ -163,6 +164,10 @@
         pending_count: 'Pending Approvals',
         present_today: 'Checked In Today',
         expiring_count: 'Expiring Soon',
+        monthly_income_title: 'Monthly Membership Fees',
+        monthly_income_text: 'Approved membership fee revenue by month',
+        total_membership_fee: 'Total Membership Fees',
+        no_income: 'No membership fees recorded yet.',
         scanner_title: 'Member QR Check-In',
         scanner_text: 'Ask the member to show their QR code. This device reads it and records attendance.',
         notifications_title: 'System Notifications',
@@ -202,8 +207,10 @@
         scanner_ready: 'Scanner ready. Point at the member QR code.',
         show_gym_qr: 'Show Gym QR',
         edit_member: 'Edit',
+        view_member: 'View',
         edit_member_title: 'Edit Member',
         edit_member_text: 'Update member information and membership details.',
+        member_expire_alert: 'Expires in {days} day(s)',
         member_status: 'Status',
         extend_months: 'Extend Membership',
         new_password_optional: 'New Password (optional)',
@@ -409,6 +416,7 @@
   DICTIONARIES.my.admin.member_qr_missing = 'ဒီအဖွဲ့ဝင်အတွက် QR ကုတ် မရှိသေးပါ။';
 
   DICTIONARIES.my.register.photo = 'ဓာတ်ပုံ';
+  DICTIONARIES.my.register.membership_fee = 'Membership Fee';
   DICTIONARIES.my.register.choose_photo = 'ဓာတ်ပုံရွေးမယ်';
   DICTIONARIES.my.register.open_camera = 'ကင်မရာဖွင့်မယ်';
   DICTIONARIES.my.register.take_photo = 'ဓာတ်ပုံရိုက်မယ်';
@@ -436,6 +444,12 @@
   DICTIONARIES.my.member.camera_permission_dismissed = 'ကင်မရာခွင့်ပြုချက် မပေးရသေးပါ။ ထပ်စမ်းကြည့်ပါ။';
   DICTIONARIES.my.member.camera_not_supported = 'ဒီစက်ရဲ့ browser မှာ camera access မရနိုင်ပါ။';
   DICTIONARIES.my.admin.show_gym_qr = 'Gym QR ပြမယ်';
+  DICTIONARIES.my.admin.monthly_income_title = 'လစဉ် Membership Fee';
+  DICTIONARIES.my.admin.monthly_income_text = 'အတည်ပြုပြီး member fee များကို လအလိုက်ပြထားသည်။';
+  DICTIONARIES.my.admin.total_membership_fee = 'Membership Fee စုစုပေါင်း';
+  DICTIONARIES.my.admin.no_income = 'Membership fee မရှိသေးပါ။';
+  DICTIONARIES.my.admin.view_member = 'ကြည့်ရန်';
+  DICTIONARIES.my.admin.member_expire_alert = 'သက်တမ်းကုန်ရန် {days} ရက်ကျန်';
   DICTIONARIES.my.admin.gym_qr_title = 'Gym ဝင်ပေါက် QR';
   DICTIONARIES.my.admin.gym_qr_text = 'ဒီ QR ကို admin စက်ပေါ်မှာပြထားပါ။ Login ဝင်ထားတဲ့ member က သူ့ dashboard ကနေ scan လုပ်ပြီး arrival ကို အလိုအလျောက်မှတ်တမ်းတင်နိုင်ပါတယ်။';
   DICTIONARIES.my.admin.gym_qr_name = 'Trace Gym ဝင်ပေါက် QR';
