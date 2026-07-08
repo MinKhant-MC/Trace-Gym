@@ -40,6 +40,7 @@
     recordMemberArrival: function (session, scannedCode) { return post('recordMemberArrival', Object.assign({}, session, { scanned_code: scannedCode })); },
     recordWorkout: function (session, workout) { return post('recordWorkout', Object.assign({}, session, { workout: workout })); },
     searchMembers: function (session, query) { return post('searchMembers', Object.assign({}, session, { query: query || '' })); },
-    updateMember: function (session, member) { return post('updateMember', Object.assign({}, session, { member: member })); }
+    updateMember: function (session, member) { return post('updateMember', Object.assign({}, session, { member: member })); },
+    removeMember: function (session, memberId) { return post('removeMember', Object.assign({}, session, { member_id: memberId })); }
   };
 })();
