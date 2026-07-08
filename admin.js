@@ -22,6 +22,15 @@
   function translateValue(value) { return common.translateValue ? common.translateValue('value', value) : value; }
   function renderQr(target, value, options) { return common.renderQr ? common.renderQr(target, value, options) : null; }
   function t(key, params) { return i18n.t ? i18n.t(key, params) : key; }
+  function showLoading(message) { if (common.showLoading) { common.showLoading(message || 'Loading...'); } }
+  function hideLoading() { if (common.hideLoading) { common.hideLoading(); } }
+
+  function withLoading(message, promiseFactory) {
+    showLoading(message || 'Loading...');
+    return Promise.resolve()
+      .then(promiseFactory)
+      .finally(hideLoading);
+  }
 
   function escapeHtml(value) {
     return String(value === undefined || value === null ? '' : value)
@@ -240,40 +249,50 @@
     });
   }
 
-  function openQuickView(title, rows) {
+  function ensureQuickViewModal() {
     var modal = byId('quickViewModal');
-    var body;
-
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'quickViewModal';
-      modal.className = 'modal-overlay';
-      modal.hidden = true;
-      modal.innerHTML =
-        '<section class="glass-panel modal-panel">' +
-          '<div class="modal-head">' +
-            '<div><h2 id="quickViewTitle"></h2></div>' +
-            '<button id="quickViewClose" class="icon-button" type="button" aria-label="Close">×</button>' +
-          '</div>' +
-          '<div id="quickViewBody" class="quick-view-body"></div>' +
-        '</section>';
-      document.body.appendChild(modal);
-      byId('quickViewClose').addEventListener('click', closeQuickView);
-      modal.addEventListener('click', function (event) {
-        if (event.target === modal) {
-          closeQuickView();
-        }
-      });
+    if (modal) {
+      return modal;
     }
 
+    modal = document.createElement('div');
+    modal.id = 'quickViewModal';
+    modal.className = 'modal-overlay';
+    modal.hidden = true;
+    modal.innerHTML =
+      '<section class="glass-panel modal-panel rich-modal-panel">' +
+        '<div class="modal-head">' +
+          '<div><h2 id="quickViewTitle"></h2></div>' +
+          '<button id="quickViewClose" class="icon-button" type="button" aria-label="Close">×</button>' +
+        '</div>' +
+        '<div id="quickViewBody" class="quick-view-body"></div>' +
+      '</section>';
+    document.body.appendChild(modal);
+    byId('quickViewClose').addEventListener('click', closeQuickView);
+    modal.addEventListener('click', function (event) {
+      if (event.target === modal) {
+        closeQuickView();
+      }
+    });
+    return modal;
+  }
+
+  function openRichView(title, html) {
+    var modal = ensureQuickViewModal();
     setText('quickViewTitle', title);
-    body = byId('quickViewBody');
-    body.innerHTML = rows.map(function (row) {
-      return '<div class="quick-view-row"><span>' + escapeHtml(row.label) + '</span><strong>' + escapeHtml(row.value || '-') + '</strong></div>';
-    }).join('');
+    byId('quickViewBody').innerHTML = html || '<div class="info-card empty-state">' + t('admin.no_list_items') + '</div>';
     modal.classList.add('is-open');
     modal.hidden = false;
     document.body.classList.add('is-modal-open');
+  }
+
+  function openQuickView(title, rows) {
+    openRichView(title, rows.map(function (row) {
+      if (row.html) {
+        return row.html;
+      }
+      return '<div class="quick-view-row"><span>' + escapeHtml(row.label) + '</span><strong>' + escapeHtml(row.value || '-') + '</strong></div>';
+    }).join(''));
   }
 
   function closeQuickView() {
@@ -341,16 +360,12 @@
     });
   }
 
-  function listRows(list, mapper) {
-    var rows = [];
-    normalizeList(list).forEach(function (item, index) {
-      rows.push(mapper(item, index));
-    });
-    return rows.length ? rows : [{ label: '-', value: t('admin.no_list_items') }];
-  }
-
   function openFullList(title, list, mapper) {
-    openQuickView(title, listRows(list, mapper));
+    var items = normalizeList(list);
+    var html = items.length
+      ? items.map(function (item, index) { return mapper(item, index); }).join('')
+      : '<div class="info-card empty-state">' + t('admin.no_list_items') + '</div>';
+    openRichView(title, html);
   }
 
   function bindFullListButtons() {
@@ -373,7 +388,11 @@
         list: function () { return dashboardData ? dashboardData.notifications : []; },
         map: function (item, index) {
           var localized = localizeNotification(item);
-          return { label: String(index + 1) + '. ' + localized.title, value: localized.message };
+          return detailCardHtml({
+            title: String(index + 1) + '. ' + localized.title,
+            subtitle: localized.message,
+            meta: []
+          });
         }
       },
       {
@@ -381,10 +400,7 @@
         title: function () { return t('admin.pending_title'); },
         list: function () { return dashboardData ? dashboardData.pending_registrations : []; },
         map: function (item, index) {
-          return {
-            label: String(index + 1) + '. ' + (item.full_name || '-'),
-            value: [item.phone, formatNumber(item.membership_months) + ' month(s)', formatNumber(item.membership_fee || 0)].join(' | ')
-          };
+          return memberLikeCardHtml(item, index, true);
         }
       },
       {
@@ -392,10 +408,23 @@
         title: function () { return t('admin.attendance_title'); },
         list: function () { return dashboardData ? dashboardData.today_attendance : []; },
         map: function (item, index) {
-          return {
-            label: String(index + 1) + '. ' + (item.full_name || '-'),
-            value: [item.phone, item.scan_time || item.scan_date || '-'].join(' | ')
-          };
+          var member = findDashboardMember(item.member_id);
+          if (member) {
+            return memberLikeCardHtml(Object.assign({}, member, {
+              scan_date: item.scan_date,
+              scan_time: item.scan_time
+            }), index, false);
+          }
+          return detailCardHtml({
+            title: String(index + 1) + '. ' + (item.full_name || '-'),
+            subtitle: item.phone || '-',
+            meta: [
+              { label: 'Member ID', value: item.member_id || '-' },
+              { label: 'Scan Date', value: item.scan_date || '-' },
+              { label: 'Scan Time', value: item.scan_time || '-' },
+              { label: 'Status', value: translateValue(item.status || '') }
+            ]
+          });
         }
       },
       {
@@ -424,27 +453,85 @@
   }
 
   function paymentHistoryRow(item, index) {
-    return {
-      label: String(index + 1) + '. ' + (item.full_name || '-') + ' / ' + (item.member_id || '-'),
-      value: [
-        formatNumber(item.amount || 0),
-        formatNumber(item.months || 0) + ' month(s)',
-        translateValue(item.payment_type || ''),
-        formatDate(item.start_date) + ' - ' + formatDate(item.end_date)
-      ].join(' | ')
-    };
+    return detailCardHtml({
+      title: String(index + 1) + '. ' + (item.full_name || '-'),
+      subtitle: item.member_id || '-',
+      meta: [
+        { label: 'Phone', value: item.phone || '-' },
+        { label: 'Type', value: translateValue(item.payment_type || '') },
+        { label: 'Months', value: formatNumber(item.months || 0) },
+        { label: 'Amount', value: formatNumber(item.amount || 0) },
+        { label: 'Period', value: formatDate(item.start_date) + ' - ' + formatDate(item.end_date) },
+        { label: 'Paid At', value: formatDate(item.paid_at) }
+      ]
+    });
   }
 
   function memberRow(item, index) {
-    return {
-      label: String(index + 1) + '. ' + (item.full_name || '-') + ' / ' + (item.member_id || '-'),
-      value: [
-        item.phone || '-',
-        translateValue(item.status || ''),
-        formatDate(item.end_date),
-        formatNumber(item.membership_fee || 0)
-      ].join(' | ')
-    };
+    return memberLikeCardHtml(item, index, false);
+  }
+
+  function paymentsForMember(memberId) {
+    return normalizeList(dashboardData && dashboardData.payment_history).filter(function (payment) {
+      return String(payment.member_id || '') === String(memberId || '');
+    });
+  }
+
+  function findDashboardMember(memberId) {
+    return normalizeList(dashboardData && dashboardData.all_members).filter(function (member) {
+      return String(member.member_id || '') === String(memberId || '');
+    })[0] || null;
+  }
+
+  function paymentMiniHtml(memberId) {
+    var payments = paymentsForMember(memberId);
+    if (!payments.length) {
+      return '<p class="muted-text">' + t('admin.no_payments') + '</p>';
+    }
+    return '<div class="mini-payment-list">' + payments.map(function (payment) {
+      return '<span>' +
+        '<b>' + escapeHtml(translateValue(payment.payment_type || '')) + '</b>' +
+        escapeHtml(formatDate(payment.start_date) + ' - ' + formatDate(payment.end_date)) +
+        '<strong>' + escapeHtml(formatNumber(payment.amount || 0)) + '</strong>' +
+      '</span>';
+    }).join('') + '</div>';
+  }
+
+  function detailCardHtml(options) {
+    var meta = normalizeList(options.meta);
+    return '<article class="rich-list-card">' +
+      '<div class="rich-list-main">' +
+        '<strong>' + escapeHtml(options.title || '-') + '</strong>' +
+        '<p>' + escapeHtml(options.subtitle || '-') + '</p>' +
+        (meta.length ? '<div class="rich-meta-grid">' + meta.map(function (row) {
+          return '<span><small>' + escapeHtml(row.label) + '</small><b>' + escapeHtml(row.value || '-') + '</b></span>';
+        }).join('') + '</div>' : '') +
+      '</div>' +
+    '</article>';
+  }
+
+  function memberLikeCardHtml(item, index, isPending) {
+    var id = item.member_id || item.registration_id || '-';
+    return '<article class="rich-list-card member-rich-card">' +
+      '<div class="member-card-photo-wrap">' +
+        (item.photo_data
+          ? '<img class="member-card-photo" src="' + escapeHtml(item.photo_data) + '" alt="">'
+          : '<div class="member-card-photo is-empty">' + escapeHtml((item.full_name || '?').charAt(0)) + '</div>') +
+      '</div>' +
+      '<div class="rich-list-main">' +
+        '<strong>' + escapeHtml(String(index + 1) + '. ' + (item.full_name || '-')) + '</strong>' +
+        '<p>' + escapeHtml([item.phone || '-', translateValue(item.gender || ''), id].join(' | ')) + '</p>' +
+        '<div class="rich-meta-grid">' +
+          '<span><small>Status</small><b>' + escapeHtml(translateValue(item.status || (isPending ? 'pending' : ''))) + '</b></span>' +
+          '<span><small>Start</small><b>' + escapeHtml(formatDate(item.start_date)) + '</b></span>' +
+          '<span><small>End</small><b>' + escapeHtml(formatDate(item.end_date)) + '</b></span>' +
+          '<span><small>Months</small><b>' + escapeHtml(formatNumber(item.membership_months || 0)) + '</b></span>' +
+          '<span><small>Total Fee</small><b>' + escapeHtml(formatNumber(item.membership_fee || 0)) + '</b></span>' +
+          '<span><small>NRC</small><b>' + escapeHtml(item.nrc || '-') + '</b></span>' +
+        '</div>' +
+        (!isPending ? '<div class="member-payment-history"><h3>' + escapeHtml(t('admin.payment_history_title')) + '</h3>' + paymentMiniHtml(item.member_id) + '</div>' : '') +
+      '</div>' +
+    '</article>';
   }
 
   function renderPending(list) {
@@ -499,8 +586,10 @@
     container.querySelectorAll('[data-approve]').forEach(function (button) {
       button.addEventListener('click', function () {
         setText('adminSummaryText', t('admin.approving_member'));
-        api.approveRegistration(session(), button.getAttribute('data-approve'))
-          .then(loadDashboard)
+        withLoading(t('admin.approving_member'), function () {
+          return api.approveRegistration(session(), button.getAttribute('data-approve'))
+            .then(loadDashboard);
+        })
           .catch(function (error) {
             setText('adminSummaryText', error && error.message ? error.message : t('admin.dashboard_failed'));
           });
@@ -510,8 +599,10 @@
     container.querySelectorAll('[data-reject]').forEach(function (button) {
       button.addEventListener('click', function () {
         setText('adminSummaryText', t('admin.rejecting_member'));
-        api.rejectRegistration(session(), button.getAttribute('data-reject'))
-          .then(loadDashboard)
+        withLoading(t('admin.rejecting_member'), function () {
+          return api.rejectRegistration(session(), button.getAttribute('data-reject'))
+            .then(loadDashboard);
+        })
           .catch(function (error) {
             setText('adminSummaryText', error && error.message ? error.message : t('admin.dashboard_failed'));
           });
@@ -725,6 +816,12 @@
     setFieldValue('editTrainer', member.personal_trainer || 'No');
     setFieldValue('editGoalNote', member.goal_note);
     setFieldValue('editNewPassword', '');
+    if (byId('editMemberPaymentHistory')) {
+      byId('editMemberPaymentHistory').innerHTML = paymentMiniHtml(member.member_id);
+    }
+    if (byId('memberRemoveButton')) {
+      byId('memberRemoveButton').setAttribute('data-member-id', member.member_id || '');
+    }
 
     if (byId('editResetPassword')) {
       byId('editResetPassword').checked = false;
@@ -978,14 +1075,53 @@
     }
     setMessage('memberEditMessage', t('admin.saving_member'), 'is-warning');
 
-    api.updateMember(session(), payload)
-      .then(function () {
-        setMessage('memberEditMessage', t('admin.member_saved'), 'is-success');
-        return loadDashboard(currentSearchQuery);
+    withLoading(t('admin.saving_member'), function () {
+      return api.updateMember(session(), payload)
+        .then(function () {
+          setMessage('memberEditMessage', t('admin.member_saved'), 'is-success');
+          return loadDashboard(currentSearchQuery);
+        });
       })
       .then(closeMemberEditModal)
       .catch(function (error) {
         setMessage('memberEditMessage', error && error.message ? error.message : t('admin.member_save_failed'), 'is-danger');
+      })
+      .finally(function () {
+        if (button) {
+          button.disabled = false;
+        }
+      });
+  }
+
+  function handleMemberRemove() {
+    var button = byId('memberRemoveButton');
+    var memberId = button ? button.getAttribute('data-member-id') : '';
+    var member = dashboardData && dashboardData.all_members
+      ? dashboardData.all_members.filter(function (item) { return item.member_id === memberId; })[0]
+      : null;
+
+    if (!memberId) {
+      return;
+    }
+
+    if (!window.confirm(t('admin.confirm_remove_member', { name: member && member.full_name ? member.full_name : memberId }))) {
+      return;
+    }
+
+    if (button) {
+      button.disabled = true;
+    }
+
+    withLoading(t('admin.removing_member'), function () {
+      return api.removeMember(session(), memberId)
+        .then(function () {
+          setMessage('memberEditMessage', t('admin.member_removed'), 'is-success');
+          closeMemberEditModal();
+          return loadDashboard(currentSearchQuery);
+        });
+    })
+      .catch(function (error) {
+        setMessage('memberEditMessage', error && error.message ? error.message : t('admin.remove_failed'), 'is-danger');
       })
       .finally(function () {
         if (button) {
@@ -1031,6 +1167,10 @@
 
     if (byId('memberEditForm')) {
       byId('memberEditForm').addEventListener('submit', handleMemberEditSave);
+    }
+
+    if (byId('memberRemoveButton')) {
+      byId('memberRemoveButton').addEventListener('click', handleMemberRemove);
     }
 
     if (byId('gymQrModal')) {
@@ -1093,3 +1233,4 @@
     init();
   }
 })();
+
