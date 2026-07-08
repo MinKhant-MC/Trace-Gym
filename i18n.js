@@ -230,6 +230,11 @@
         saving_member: 'Saving member...',
         member_saved: 'Member information saved.',
         member_save_failed: 'Could not save member information.',
+        remove_member: 'Remove Member',
+        removing_member: 'Removing member...',
+        member_removed: 'Member removed.',
+        remove_failed: 'Could not remove member.',
+        confirm_remove_member: 'Remove {name}? Old fee history will stay saved.',
         gym_qr_title: 'Gym Entry QR',
         gym_qr_text: 'Open this QR on the admin device. Logged-in members can scan it from their dashboard to mark arrival automatically.',
         gym_qr_name: 'Trace Gym Entry QR',
@@ -246,6 +251,7 @@
         approved: 'Approved',
         rejected: 'Rejected',
         expired: 'Expired',
+        removed: 'Removed',
         yes: 'Yes',
         no: 'No',
         male: 'Male',
@@ -475,6 +481,11 @@
   DICTIONARIES.my.admin.no_list_items = 'ပြရန် မှတ်တမ်း မရှိသေးပါ။';
   DICTIONARIES.my.admin.member_fee_total = 'စုစုပေါင်း Membership Fee';
   DICTIONARIES.my.admin.extension_fee = 'သက်တမ်းတိုး Fee';
+  DICTIONARIES.my.admin.remove_member = 'Member ဖယ်ရှားရန်';
+  DICTIONARIES.my.admin.removing_member = 'Member ဖယ်ရှားနေပါသည်...';
+  DICTIONARIES.my.admin.member_removed = 'Member ဖယ်ရှားပြီးပါပြီ။';
+  DICTIONARIES.my.admin.remove_failed = 'Member ဖယ်ရှားလို့မရပါ။';
+  DICTIONARIES.my.admin.confirm_remove_member = '{name} ကို ဖယ်ရှားမလား။ Fee မှတ်တမ်းတွေကို ဆက်သိမ်းထားပါမယ်။';
   DICTIONARIES.my.admin.view_member = 'ကြည့်ရန်';
   DICTIONARIES.my.admin.member_expire_alert = 'သက်တမ်းကုန်ရန် {days} ရက်ကျန်';
   DICTIONARIES.my.admin.gym_qr_title = 'Gym ဝင်ပေါက် QR';
@@ -487,6 +498,7 @@
   DICTIONARIES.my.admin.no_gym_qr = 'Gym QR မပေါ်သေးပါ။ Apps Script ကို update ပြီး deploy ပြန်လုပ်ပြီး page ကို refresh လုပ်ပါ။';
   DICTIONARIES.my.value.registration = 'စာရင်းသွင်း Fee';
   DICTIONARIES.my.value.extension = 'သက်တမ်းတိုး Fee';
+  DICTIONARIES.my.value.removed = 'ဖယ်ရှားပြီး';
   DICTIONARIES.my.login.downloading_data = 'Dashboard အချက်အလက်တွေကို ဒီစက်ထဲ သိမ်းနေပါသည်...';
   DICTIONARIES.my.member.weekly_calories_title = '၇ ရက်စာ Calories';
   DICTIONARIES.my.member.weekly_calories_text = 'ပြီးခဲ့သော ၇ ရက်အတွင်း လောင်ကျွမ်းခဲ့သော calories ကို ပြထားပါသည်။ ၇ ရက်ကျော်သော workout မှတ်တမ်းများကို ဖျက်ပါမည်။';
