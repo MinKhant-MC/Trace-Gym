@@ -159,14 +159,9 @@
     object-fit: cover;
   }
 
-  .photo-capture-panel,
-  .workout-detail-grid {
+.workout-detail-grid {
     padding: 12px;
     border-radius: 18px;
-  }
-
-  .photo-preview-shell {
-    min-height: 180px;
   }
 
   .form-stack {
@@ -1095,8 +1090,7 @@ button:disabled {
   line-height: 1.7;
 }
 
-.qr-card,
-.photo-capture-panel {
+.qr-card {
   display: grid;
   gap: 14px;
   padding: 18px;
