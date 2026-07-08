@@ -123,28 +123,6 @@
             <label for="trainerNotes" data-i18n="register.goal_note">Fitness Goal / Note</label>
             <input id="trainerNotes" type="text" data-i18n-placeholder="register.goal_placeholder" placeholder="Weight loss, muscle gain, rehab, etc.">
           </div>
-          <div class="field field-span-2">
-            <label data-i18n="register.photo">Member Photo</label>
-            <div class="photo-capture-panel">
-              <input id="photoUpload" type="file" accept=".jpg,.jpeg,.png,.webp" hidden>
-              <div class="inline-actions">
-                <button id="choosePhotoButton" class="secondary-button button-inline" type="button">
-                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h4l2-2h2l2 2h4v12H5z"></path><circle cx="12" cy="13" r="3"></circle></svg>
-                  <span data-i18n="register.choose_photo">Choose Photo</span>
-                </button>
-                <button id="retakePhotoButton" class="ghost-button button-inline" type="button" hidden>
-                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6"></path><path d="M20 20v-6h-6"></path><path d="M20 8a8 8 0 0 0-13.66-2.34L4 8"></path><path d="M4 16a8 8 0 0 0 13.66 2.34L20 16"></path></svg>
-                  <span data-i18n="register.retake_photo">Retake</span>
-                </button>
-              </div>
-              <canvas id="photoCanvas" hidden></canvas>
-              <div class="photo-preview-shell">
-                <img id="photoPreview" class="photo-preview" alt="Member photo preview" hidden>
-                <div id="photoPlaceholder" class="photo-placeholder" data-i18n="register.photo_placeholder">No photo selected yet</div>
-              </div>
-              <p id="photoMessage" class="form-message" aria-live="polite"></p>
-            </div>
-          </div>
         </div>
 
         <p class="info-note" data-i18n="register.info_note">Member login after approval: phone number + your password</p>
