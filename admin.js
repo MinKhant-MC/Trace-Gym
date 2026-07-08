@@ -448,7 +448,8 @@
     container.innerHTML = list.map(function (item) {
       var value = Number(item.amount || 0);
       var height = max > 0 ? Math.max(8, Math.round((value / max) * 100)) : 8;
-      return '<div class="income-bar-item">' +
+      var currentClass = String(item.month || '') === currentMonth ? ' is-current' : '';
+      return '<div class="income-bar-item' + currentClass + '">' +
         '<div class="income-bar-track"><span style="height:' + height + '%"></span></div>' +
         '<strong>' + escapeHtml(item.label || '') + '</strong>' +
         '<small>' + formatNumber(value) + '</small>' +
