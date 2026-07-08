@@ -4,7 +4,6 @@
   var api = window.GYM_API || {};
   var common = window.GYM_COMMON || {};
   var i18n = window.GYM_I18N || {};
-  var photoDataUrl = '';
 
   function byId(id) { return common.byId(id); }
   function setMessage(id, message, type) { return common.setMessage(id, message, type); }
@@ -71,98 +70,8 @@
       start_date: byId('startDate').value,
       membership_months: byId('membershipMonths').value,
       personal_trainer: byId('personalTrainer').value,
-      goal_note: byId('trainerNotes').value.trim(),
-      photo_data: photoDataUrl
+      goal_note: byId('trainerNotes').value.trim()
     };
-  }
-
-  function stopCamera() {
-  }
-
-  function setPreview(dataUrl) {
-    var preview = byId('photoPreview');
-    var placeholder = byId('photoPlaceholder');
-    var retakeButton = byId('retakePhotoButton');
-
-    photoDataUrl = dataUrl || '';
-
-    if (!preview || !placeholder) {
-      return;
-    }
-
-    if (photoDataUrl) {
-      preview.src = photoDataUrl;
-      preview.hidden = false;
-      placeholder.hidden = true;
-      if (retakeButton) {
-        retakeButton.hidden = false;
-      }
-    } else {
-      preview.removeAttribute('src');
-      preview.hidden = true;
-      placeholder.hidden = false;
-      if (retakeButton) {
-        retakeButton.hidden = true;
-      }
-    }
-  }
-
-  function drawToSizedCanvas(source, callback) {
-    var canvas = byId('photoCanvas');
-    var context;
-    var width;
-    var height;
-    var maxSize = 720;
-    var scale;
-
-    if (!canvas) {
-      callback('');
-      return;
-    }
-
-    width = source.videoWidth || source.naturalWidth || source.width;
-    height = source.videoHeight || source.naturalHeight || source.height;
-
-    if (!width || !height) {
-      callback('');
-      return;
-    }
-
-    scale = Math.min(1, maxSize / Math.max(width, height));
-    canvas.width = Math.round(width * scale);
-    canvas.height = Math.round(height * scale);
-    context = canvas.getContext('2d');
-    context.drawImage(source, 0, 0, canvas.width, canvas.height);
-    callback(canvas.toDataURL('image/jpeg', 0.82));
-  }
-
-  function handleFileChange(event) {
-    var file = event.target.files && event.target.files[0];
-    var reader;
-    var image;
-
-    if (!file) {
-      return;
-    }
-
-    reader = new FileReader();
-    reader.onload = function (loadEvent) {
-      image = new Image();
-      image.onload = function () {
-        drawToSizedCanvas(image, function (dataUrl) {
-          setPreview(dataUrl);
-          setMessage('photoMessage', t('register.photo_ready'), 'is-success');
-        });
-      };
-      image.src = loadEvent.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function openPhotoPicker() {
-    if (byId('photoUpload')) {
-      byId('photoUpload').click();
-    }
   }
 
   function bindPasswordToggles() {
@@ -211,20 +120,12 @@
       return;
     }
 
-    if (!payload.photo_data) {
-      setMessage('registerMessage', t('register.photo_required'), 'is-danger');
-      return;
-    }
-
     button.disabled = true;
     setMessage('registerMessage', t('register.submitting'), 'is-warning');
 
     api.registerMember(payload)
       .then(function (data) {
         event.target.reset();
-        stopCamera();
-        setPreview('');
-        setMessage('photoMessage', '', '');
         try {
           localStorage.setItem('gym_admin_refresh_signal', String(Date.now()));
         } catch (storageError) {}
@@ -256,20 +157,6 @@
     bindPasswordToggles();
     bindUnitHints();
 
-    if (byId('photoUpload')) {
-      byId('photoUpload').addEventListener('change', handleFileChange);
-    }
-
-    if (byId('choosePhotoButton')) {
-      byId('choosePhotoButton').addEventListener('click', openPhotoPicker);
-    }
-
-    if (byId('retakePhotoButton')) {
-      byId('retakePhotoButton').addEventListener('click', function () {
-        setPreview('');
-        openPhotoPicker();
-      });
-    }
   }
 
   if (document.readyState === 'loading') {
