@@ -179,6 +179,7 @@
         total_income: Number(stats.total_income || payload.total_income || 0)
       },
       monthly_income: normalizeList(payload.monthly_income || payload.monthlyIncome),
+      payment_history: normalizeList(payload.payment_history || payload.payments || payload.membership_payments),
       notifications: normalizeList(payload.notifications || payload.alerts),
       pending_registrations: normalizeList(payload.pending_registrations || payload.pending || payload.registrations),
       today_attendance: normalizeList(payload.today_attendance || payload.attendance || payload.present_members),
@@ -303,6 +304,147 @@
       card.innerHTML = '<strong>' + localized.title + '</strong><p>' + localized.message + '</p>';
       container.appendChild(card);
     });
+  }
+
+  function renderPaymentHistory(list) {
+    var container = byId('paymentHistoryList');
+    var preview = normalizeList(list).slice(0, 5);
+
+    if (!container) {
+      return;
+    }
+    container.innerHTML = '';
+
+    if (!preview.length) {
+      container.innerHTML = '<div class="info-card empty-state">' + t('admin.no_payments') + '</div>';
+      return;
+    }
+
+    preview.forEach(function (item) {
+      var card = document.createElement('article');
+      card.className = 'info-card payment-history-card';
+      card.innerHTML =
+        '<div>' +
+          '<strong>' + escapeHtml(item.full_name || '-') + '</strong>' +
+          '<p>' + t('admin.payment_line', {
+            amount: formatNumber(item.amount || 0),
+            months: formatNumber(item.months || 0),
+            type: translateValue(item.payment_type || '')
+          }) + '</p>' +
+          '<span>' + t('admin.payment_period', {
+            start: formatDate(item.start_date),
+            end: formatDate(item.end_date)
+          }) + '</span>' +
+        '</div>' +
+        '<time>' + formatDate(item.paid_at) + '</time>';
+      container.appendChild(card);
+    });
+  }
+
+  function listRows(list, mapper) {
+    var rows = [];
+    normalizeList(list).forEach(function (item, index) {
+      rows.push(mapper(item, index));
+    });
+    return rows.length ? rows : [{ label: '-', value: t('admin.no_list_items') }];
+  }
+
+  function openFullList(title, list, mapper) {
+    openQuickView(title, listRows(list, mapper));
+  }
+
+  function bindFullListButtons() {
+    var buttonMap = [
+      {
+        id: 'viewPaymentsButton',
+        title: function () { return t('admin.payment_history_title'); },
+        list: function () { return dashboardData ? dashboardData.payment_history : []; },
+        map: paymentHistoryRow
+      },
+      {
+        id: 'viewPaymentHistoryButton',
+        title: function () { return t('admin.payment_history_title'); },
+        list: function () { return dashboardData ? dashboardData.payment_history : []; },
+        map: paymentHistoryRow
+      },
+      {
+        id: 'viewNotificationsButton',
+        title: function () { return t('admin.notifications_title'); },
+        list: function () { return dashboardData ? dashboardData.notifications : []; },
+        map: function (item, index) {
+          var localized = localizeNotification(item);
+          return { label: String(index + 1) + '. ' + localized.title, value: localized.message };
+        }
+      },
+      {
+        id: 'viewPendingButton',
+        title: function () { return t('admin.pending_title'); },
+        list: function () { return dashboardData ? dashboardData.pending_registrations : []; },
+        map: function (item, index) {
+          return {
+            label: String(index + 1) + '. ' + (item.full_name || '-'),
+            value: [item.phone, formatNumber(item.membership_months) + ' month(s)', formatNumber(item.membership_fee || 0)].join(' | ')
+          };
+        }
+      },
+      {
+        id: 'viewAttendanceButton',
+        title: function () { return t('admin.attendance_title'); },
+        list: function () { return dashboardData ? dashboardData.today_attendance : []; },
+        map: function (item, index) {
+          return {
+            label: String(index + 1) + '. ' + (item.full_name || '-'),
+            value: [item.phone, item.scan_time || item.scan_date || '-'].join(' | ')
+          };
+        }
+      },
+      {
+        id: 'viewAllMembersButton',
+        title: function () { return t('admin.all_members_title'); },
+        list: function () { return dashboardData ? dashboardData.all_members : []; },
+        map: memberRow
+      },
+      {
+        id: 'viewSearchButton',
+        title: function () { return t('admin.search_title'); },
+        list: function () { return dashboardData ? dashboardData.search_results : []; },
+        map: memberRow
+      }
+    ];
+
+    buttonMap.forEach(function (entry) {
+      var button = byId(entry.id);
+      if (!button) {
+        return;
+      }
+      button.addEventListener('click', function () {
+        openFullList(entry.title(), entry.list(), entry.map);
+      });
+    });
+  }
+
+  function paymentHistoryRow(item, index) {
+    return {
+      label: String(index + 1) + '. ' + (item.full_name || '-') + ' / ' + (item.member_id || '-'),
+      value: [
+        formatNumber(item.amount || 0),
+        formatNumber(item.months || 0) + ' month(s)',
+        translateValue(item.payment_type || ''),
+        formatDate(item.start_date) + ' - ' + formatDate(item.end_date)
+      ].join(' | ')
+    };
+  }
+
+  function memberRow(item, index) {
+    return {
+      label: String(index + 1) + '. ' + (item.full_name || '-') + ' / ' + (item.member_id || '-'),
+      value: [
+        item.phone || '-',
+        translateValue(item.status || ''),
+        formatDate(item.end_date),
+        formatNumber(item.membership_fee || 0)
+      ].join(' | ')
+    };
   }
 
   function renderPending(list) {
@@ -476,6 +618,7 @@
     setText('presentToday', formatNumber(normalized.stats.present_today));
     setText('expiringCount', formatNumber(normalized.stats.expiring_soon));
     renderMonthlyIncomeChart(normalized.monthly_income);
+    renderPaymentHistory(normalized.payment_history);
     renderNotifications(normalized.notifications);
     renderPending(normalized.pending_registrations);
     renderAttendance(normalized.today_attendance);
@@ -578,6 +721,7 @@
     setFieldValue('editMonths', member.membership_months);
     setFieldValue('editIncome', member.membership_fee);
     setFieldValue('editExtendMonths', 0);
+    setFieldValue('editExtensionFee', '');
     setFieldValue('editTrainer', member.personal_trainer || 'No');
     setFieldValue('editGoalNote', member.goal_note);
     setFieldValue('editNewPassword', '');
@@ -822,6 +966,7 @@
       membership_months: byId('editMonths').value,
       membership_fee: byId('editIncome') ? byId('editIncome').value : '',
       extend_months: byId('editExtendMonths') ? byId('editExtendMonths').value : '',
+      extension_fee: byId('editExtensionFee') ? byId('editExtensionFee').value : '',
       personal_trainer: byId('editTrainer').value,
       goal_note: byId('editGoalNote').value.trim(),
       new_password: byId('editNewPassword') ? byId('editNewPassword').value.trim() : '',
@@ -858,6 +1003,7 @@
     closeMemberEditModal();
     bindPasswordToggles();
     bindUnitHints();
+    bindFullListButtons();
 
     if (byId('memberSearchForm')) {
       byId('memberSearchForm').addEventListener('submit', handleSearch);
