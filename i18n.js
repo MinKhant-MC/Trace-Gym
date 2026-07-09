@@ -5,13 +5,13 @@
   var DICTIONARIES = {
     en: {
       page_title: {
-        login: 'Trace Gym',
-        register: 'Trace Gym Registration',
-        member: 'Trace Gym Member Dashboard',
-        admin: 'Trace Gym Admin Dashboard'
+        login: 'Tranc Gym',
+        register: 'Tranc Gym Registration',
+        member: 'Tranc Gym Member Dashboard',
+        admin: 'Tranc Gym Admin Dashboard'
       },
       common: {
-        brand: 'Trace Gym',
+        brand: 'Tranc Gym',
         back_to_login: 'Back to Login',
         logout: 'Logout',
         close: 'Close',
@@ -24,7 +24,7 @@
         stop_scanner: 'Stop Scanner'
       },
       login: {
-        title: 'Trace Gym Membership System',
+        title: 'Tranc Gym Membership System',
         subtitle: 'A clean gym platform for registration, attendance, workouts, and membership tracking.',
         member_role: 'Member Login',
         admin_role: 'Admin Login',
@@ -75,6 +75,7 @@
         retake_photo: 'Retake',
         photo_placeholder: 'No photo selected yet',
         photo_required: 'Please add a member photo before submitting.',
+        photo_too_large: 'Photo is too large. Please choose or take the photo again.',
         photo_ready: 'Photo is ready.',
         photo_failed: 'Could not capture the photo.',
         open_camera_first: 'Open the camera first.',
@@ -158,7 +159,7 @@
       },
       admin: {
         sidebar_title: 'Admin Panel',
-        sidebar_text: 'Approve members, read member QR codes, and monitor membership status.',
+        sidebar_text: 'Approve members, show gym QR, and monitor membership status.',
         hero_title: 'Admin Dashboard',
         loading: 'Loading gym system...',
         total_members: 'Total Active Members',
@@ -178,8 +179,8 @@
         payment_period: '{start} to {end}',
         view_all: 'View all',
         no_list_items: 'No records to show.',
-        scanner_title: 'Member QR Check-In',
-        scanner_text: 'Ask the member to show their QR code. This device reads it and records attendance.',
+        scanner_title: 'Gym Entry QR',
+        scanner_text: 'Show this gym QR on the admin device. Members scan it from their dashboard when they arrive.',
         notifications_title: 'System Notifications',
         notifications_text: 'Membership expiry alerts for admin',
         pending_title: 'Pending Registrations',
@@ -237,7 +238,7 @@
         confirm_remove_member: 'Remove {name}? Old fee history will stay saved.',
         gym_qr_title: 'Gym Entry QR',
         gym_qr_text: 'Open this QR on the admin device. Logged-in members can scan it from their dashboard to mark arrival automatically.',
-        gym_qr_name: 'Trace Gym Entry QR',
+        gym_qr_name: 'Tranc Gym Entry QR',
         gym_qr_meta: 'Members scan this from their dashboard to check in.',
         no_gym_qr: 'Gym QR is not ready yet. Update and redeploy Apps Script, then refresh this page.',
         camera_failed: 'Could not access camera.',
@@ -264,13 +265,13 @@
     },
     my: {
       page_title: {
-        login: 'Trace Gym',
-        register: 'Trace Gym စာရင်းသွင်းခြင်း',
-        member: 'Trace Gym အဖွဲ့ဝင် မျက်နှာစာ',
-        admin: 'Trace Gym စီမံခန့်ခွဲမှု မျက်နှာစာ'
+        login: 'Tranc Gym',
+        register: 'Tranc Gym စာရင်းသွင်းခြင်း',
+        member: 'Tranc Gym အဖွဲ့ဝင် မျက်နှာစာ',
+        admin: 'Tranc Gym စီမံခန့်ခွဲမှု မျက်နှာစာ'
       },
       common: {
-        brand: 'Trace Gym',
+        brand: 'Tranc Gym',
         back_to_login: 'ဝင်ရန်စာမျက်နှာသို့ ပြန်သွားရန်',
         logout: 'ထွက်ရန်',
         save: 'သိမ်းရန်',
@@ -281,7 +282,7 @@
         stop_scanner: 'ရပ်မယ်'
       },
       login: {
-        title: 'Trace Gym အသင်းဝင်စနစ်',
+        title: 'Tranc Gym အသင်းဝင်စနစ်',
         subtitle: 'အဖွဲ့ဝင်စာရင်းသွင်းတာ၊ ဝင်လာတာမှတ်တာ၊ လေ့ကျင့်ခန်းမှတ်တာနဲ့ သက်တမ်းကြည့်တာတွေကို တစ်နေရာတည်းမှာ သုံးနိုင်ပါတယ်။',
         member_role: 'အဖွဲ့ဝင် ဝင်ရန်',
         admin_role: 'စီမံခန့်ခွဲသူ ဝင်ရန်',
@@ -445,6 +446,7 @@
   DICTIONARIES.my.register.retake_photo = 'ပြန်ရိုက်မယ်';
   DICTIONARIES.my.register.photo_placeholder = 'ဓာတ်ပုံ မထည့်ရသေးပါ။';
   DICTIONARIES.my.register.photo_required = 'စာရင်းသွင်းမပို့ခင် ဓာတ်ပုံထည့်ပေးပါ။';
+  DICTIONARIES.my.register.photo_too_large = 'ဓာတ်ပုံအရွယ်အစားကြီးနေပါတယ်။ နောက်တစ်ပုံ ပြန်ရွေးပါ။';
   DICTIONARIES.my.register.photo_ready = 'ဓာတ်ပုံ အဆင်သင့်ဖြစ်ပါပြီ။';
   DICTIONARIES.my.register.photo_failed = 'ဓာတ်ပုံ မရိုက်နိုင်ပါ။';
   DICTIONARIES.my.register.open_camera_first = 'အရင် ကင်မရာဖွင့်ပေးပါ။';
@@ -490,12 +492,15 @@
   DICTIONARIES.my.admin.member_expire_alert = 'သက်တမ်းကုန်ရန် {days} ရက်ကျန်';
   DICTIONARIES.my.admin.gym_qr_title = 'Gym ဝင်ပေါက် QR';
   DICTIONARIES.my.admin.gym_qr_text = 'ဒီ QR ကို admin စက်ပေါ်မှာပြထားပါ။ Login ဝင်ထားတဲ့ member က သူ့ dashboard ကနေ scan လုပ်ပြီး arrival ကို အလိုအလျောက်မှတ်တမ်းတင်နိုင်ပါတယ်။';
-  DICTIONARIES.my.admin.gym_qr_name = 'Trace Gym ဝင်ပေါက် QR';
+  DICTIONARIES.my.admin.gym_qr_name = 'Tranc Gym ဝင်ပေါက် QR';
   DICTIONARIES.my.admin.gym_qr_meta = 'Member က သူ့ dashboard ကနေ scan လုပ်ပြီး check in ဝင်ပါမယ်။';
   DICTIONARIES.my.admin.no_gym_qr = 'Gym QR မရသေးပါ။';
 
   DICTIONARIES.my.register.pending_notice = 'အခြေအနေ - Admin အတည်ပြုရန် စောင့်ဆိုင်းနေပါသည်။';
   DICTIONARIES.my.admin.no_gym_qr = 'Gym QR မပေါ်သေးပါ။ Apps Script ကို update ပြီး deploy ပြန်လုပ်ပြီး page ကို refresh လုပ်ပါ။';
+  DICTIONARIES.my.admin.sidebar_text = 'အဖွဲ့ဝင်အတည်ပြုခြင်း၊ Gym QR ပြခြင်းနဲ့ သက်တမ်းအခြေအနေတွေကို စီမံနိုင်ပါတယ်။';
+  DICTIONARIES.my.admin.scanner_title = 'Gym ဝင်ပေါက် QR';
+  DICTIONARIES.my.admin.scanner_text = 'ဒီ Gym QR ကို Admin စက်မှာပြထားပါ။ Member တွေ Gym ရောက်တဲ့အခါ သူတို့ Dashboard ကနေ Scan လုပ်ပါမယ်။';
   DICTIONARIES.my.value.registration = 'စာရင်းသွင်း Fee';
   DICTIONARIES.my.value.extension = 'သက်တမ်းတိုး Fee';
   DICTIONARIES.my.value.removed = 'ဖယ်ရှားပြီး';
@@ -668,3 +673,4 @@
     t: t
   };
 })();
+
