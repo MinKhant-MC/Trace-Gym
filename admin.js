@@ -5,10 +5,7 @@
   var auth = window.GYM_AUTH || {};
   var common = window.GYM_COMMON || {};
   var i18n = window.GYM_I18N || {};
-  var zxingReader = null;
-  var scannerControls = null;
   var dashboardData = null;
-  var scannerLocked = false;
   var currentSearchQuery = '';
   var currentSearchResults = {};
   var dashboardRefreshTimer = null;
@@ -85,26 +82,6 @@
       return '';
     }
     return String(Math.round(number * 10) / 10);
-  }
-
-  function mapCameraError(error) {
-    var message = error && error.message ? String(error.message) : '';
-    var lowered = message.toLowerCase();
-
-    if (lowered.indexOf('permission dismissed') !== -1) {
-      return t('admin.camera_permission_dismissed');
-    }
-
-    if (
-      lowered.indexOf('notallowederror') !== -1 ||
-      lowered.indexOf('permission denied') !== -1 ||
-      lowered.indexOf('permission dismissed') !== -1 ||
-      lowered.indexOf('denied') !== -1
-    ) {
-      return t('admin.camera_permission_denied');
-    }
-
-    return message || t('admin.camera_failed');
   }
 
   function localizeNotification(item) {
@@ -880,131 +857,6 @@
     document.body.classList.add('is-modal-open');
   }
 
-  function stopScanner() {
-    var video = byId('scannerVideo');
-
-    if (scannerControls && typeof scannerControls.stop === 'function') {
-      scannerControls.stop();
-    }
-
-    scannerControls = null;
-    scannerLocked = false;
-
-    if (video) {
-      video.pause();
-      video.srcObject = null;
-      video.hidden = true;
-    }
-
-    if (byId('startScannerButton')) {
-      byId('startScannerButton').hidden = false;
-    }
-
-    if (byId('stopScannerButton')) {
-      byId('stopScannerButton').hidden = true;
-    }
-  }
-
-  function handleQrScan(code) {
-    if (scannerLocked) {
-      return;
-    }
-    scannerLocked = true;
-    setMessage('scannerMessage', t('admin.recording_attendance'), 'is-warning');
-
-    api.recordAttendanceByQr(session(), code)
-      .then(function () {
-        setMessage('scannerMessage', t('admin.attendance_recorded'), 'is-success');
-        stopScanner();
-        return loadDashboard();
-      })
-      .catch(function (error) {
-        scannerLocked = false;
-        setMessage('scannerMessage', error && error.message ? error.message : t('admin.scan_failed'), 'is-danger');
-      });
-  }
-
-  function startCameraDecode(video, onResult) {
-    var constraintsList = [
-      {
-        video: {
-          facingMode: { exact: 'environment' },
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
-        audio: false
-      },
-      {
-        video: {
-          facingMode: { ideal: 'environment' },
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
-        audio: false
-      },
-      {
-        video: true,
-        audio: false
-      }
-    ];
-
-    function tryConstraint(index) {
-      if (index >= constraintsList.length) {
-        return Promise.reject(new Error(t('admin.camera_failed')));
-      }
-
-      return zxingReader.decodeFromConstraints(constraintsList[index], video, function (result) {
-        var code = result && typeof result.getText === 'function' ? result.getText() : '';
-        if (code) {
-          onResult(code);
-        }
-      }).catch(function (error) {
-        if (index + 1 < constraintsList.length) {
-          return tryConstraint(index + 1);
-        }
-        throw error;
-      });
-    }
-
-    return tryConstraint(0);
-  }
-
-  function startScanner() {
-    var video = byId('scannerVideo');
-
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setMessage('scannerMessage', t('admin.camera_failed'), 'is-danger');
-      return;
-    }
-
-    if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
-      setMessage('scannerMessage', 'Camera needs HTTPS on mobile. Open the hosted https:// website.', 'is-danger');
-      return;
-    }
-
-    if (!window.ZXingBrowser || !window.ZXingBrowser.BrowserMultiFormatReader) {
-      setMessage('scannerMessage', t('admin.scanner_unavailable'), 'is-danger');
-      return;
-    }
-
-    zxingReader = zxingReader || new window.ZXingBrowser.BrowserMultiFormatReader();
-    video.hidden = false;
-    video.setAttribute('playsinline', 'true');
-    video.muted = true;
-    byId('startScannerButton').hidden = true;
-    byId('stopScannerButton').hidden = false;
-    scannerLocked = false;
-    setMessage('scannerMessage', t('admin.scanner_starting'), 'is-warning');
-
-    startCameraDecode(video, handleQrScan).then(function (controls) {
-      scannerControls = controls;
-      setMessage('scannerMessage', t('admin.scanner_ready'), 'is-success');
-    }).catch(function (error) {
-      stopScanner();
-      setMessage('scannerMessage', mapCameraError(error), 'is-danger');
-    });
-  }
-
   function bindPasswordToggles() {
     document.querySelectorAll('[data-toggle-password]').forEach(function (button) {
       button.addEventListener('click', function () {
@@ -1145,16 +997,8 @@
       byId('memberSearchForm').addEventListener('submit', handleSearch);
     }
 
-    if (byId('startScannerButton')) {
-      byId('startScannerButton').addEventListener('click', startScanner);
-    }
-
     if (byId('showGymQrButton')) {
       byId('showGymQrButton').addEventListener('click', openGymQrModal);
-    }
-
-    if (byId('stopScannerButton')) {
-      byId('stopScannerButton').addEventListener('click', stopScanner);
     }
 
     if (byId('closeGymQrModalButton')) {
@@ -1217,7 +1061,6 @@
     });
 
     window.addEventListener('beforeunload', function () {
-      stopScanner();
       if (dashboardRefreshTimer) {
         clearInterval(dashboardRefreshTimer);
       }
