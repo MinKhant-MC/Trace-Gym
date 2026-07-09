@@ -7,10 +7,10 @@
   <title>Tranc Gym Admin Dashboard</title>
   <meta name="theme-color" content="#15130f">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/png" href="assets/trace-gym-logo.png">
-  <link rel="apple-touch-icon" href="assets/trace-gym-logo.png">
+  <link rel="icon" type="image/png" href="assets/tranc-gym-logo.png">
+  <link rel="apple-touch-icon" href="assets/tranc-gym-logo.png">
   <link rel="preload" href="style.css" as="style">
-  <link rel="preload" href="assets/trace-gym-logo.png" as="image">
+  <link rel="preload" href="assets/tranc-gym-logo.png" as="image">
   <link rel="prefetch" href="index.html">
   <link rel="prefetch" href="register.html">
   <link rel="prefetch" href="member.html">
@@ -21,7 +21,7 @@
     <aside class="side-panel glass-panel">
       <div>
         <div class="brand-mark">
-          <img class="brand-logo-image" src="assets/trace-gym-logo.png" alt="Tranc Gym logo">
+          <img class="brand-logo-image" src="assets/tranc-gym-logo.png" alt="Tranc Gym logo">
         </div>
         <h2 data-i18n="admin.sidebar_title">Admin Panel</h2>
         <p class="muted-text" data-i18n="admin.sidebar_text">Approve members, show gym QR, and monitor membership status.</p>
@@ -255,10 +255,6 @@
           <input id="editEmail" type="email">
         </div>
         <div class="field">
-          <label for="editNrc" data-i18n="register.nrc">NRC</label>
-          <input id="editNrc" type="text" required>
-        </div>
-        <div class="field">
           <label for="editGender" data-i18n="register.gender">Gender</label>
           <select id="editGender" required>
             <option value="Male" data-i18n="register.gender_male">Male</option>
@@ -329,10 +325,6 @@
           <label for="editGoalNote" data-i18n="register.goal_note">Fitness Goal / Note</label>
           <input id="editGoalNote" type="text">
         </div>
-        <label class="check-row field-span-2">
-          <input id="editResetPassword" type="checkbox">
-          <span data-i18n="admin.reset_password_to_nrc">Reset member password to NRC</span>
-        </label>
         <div class="field field-span-2">
           <label for="editNewPassword" data-i18n="admin.new_password_optional">New Password (optional)</label>
           <div class="password-field">
@@ -368,4 +360,5 @@
   <script src="pwa.js"></script>
 </body>
 </html>
+
 
