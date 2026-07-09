@@ -504,7 +504,6 @@
           '<span><small>End</small><b>' + escapeHtml(formatDate(item.end_date)) + '</b></span>' +
           '<span><small>Months</small><b>' + escapeHtml(formatNumber(item.membership_months || 0)) + '</b></span>' +
           '<span><small>Total Fee</small><b>' + escapeHtml(formatNumber(item.membership_fee || 0)) + '</b></span>' +
-          '<span><small>NRC</small><b>' + escapeHtml(item.nrc || '-') + '</b></span>' +
         '</div>' +
         (!isPending ? '<div class="member-payment-history"><h3>' + escapeHtml(t('admin.payment_history_title')) + '</h3>' + paymentMiniHtml(item.member_id) + '</div>' : '') +
       '</div>' +
@@ -551,7 +550,6 @@
         var item = list.filter(function (row) { return row.registration_id === id; })[0] || {};
         openQuickView(item.full_name || t('admin.pending_title'), [
           { label: 'Phone', value: item.phone },
-          { label: 'NRC', value: item.nrc },
           { label: 'Gender', value: translateValue(item.gender || '') },
           { label: 'Membership Fee', value: formatNumber(item.membership_fee) },
           { label: 'Start Date', value: formatDate(item.start_date) },
@@ -777,7 +775,6 @@
     setFieldValue('editFullName', member.full_name);
     setFieldValue('editPhone', member.phone);
     setFieldValue('editEmail', member.email);
-    setFieldValue('editNrc', member.nrc);
     setFieldValue('editGender', member.gender || 'Male');
     setFieldValue('editStatus', member.status || 'active');
     setFieldValue('editWeight', member.weight_kg);
@@ -800,9 +797,6 @@
       byId('memberRemoveButton').setAttribute('data-member-id', member.member_id || '');
     }
 
-    if (byId('editResetPassword')) {
-      byId('editResetPassword').checked = false;
-    }
     if (byId('editMemberPhotoName')) {
       setText('editMemberPhotoName', member.full_name || member.member_id || 'Member');
     }
@@ -905,7 +899,6 @@
       full_name: byId('editFullName').value.trim(),
       phone: byId('editPhone').value.trim(),
       email: byId('editEmail').value.trim(),
-      nrc: byId('editNrc').value.trim(),
       gender: byId('editGender').value,
       status: byId('editStatus').value,
       weight_kg: convertWeightToKg(byId('editWeight').value, byId('editWeightUnit').value),
@@ -918,8 +911,7 @@
       extension_fee: byId('editExtensionFee') ? byId('editExtensionFee').value : '',
       personal_trainer: byId('editTrainer').value,
       goal_note: byId('editGoalNote').value.trim(),
-      new_password: byId('editNewPassword') ? byId('editNewPassword').value.trim() : '',
-      reset_password_to_nrc: byId('editResetPassword') && byId('editResetPassword').checked ? 'true' : ''
+      new_password: byId('editNewPassword') ? byId('editNewPassword').value.trim() : ''
     };
 
     if (button) {
