@@ -4,19 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.qrserver.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <title>Trace Gym Registration</title>
+  <title>Tranc Gym Registration</title>
   <meta name="theme-color" content="#15130f">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/png" href="assets/trace-gym-logo.png">
-  <link rel="apple-touch-icon" href="assets/trace-gym-logo.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/tranc-gym-logo.png">
+  <link rel="apple-touch-icon" href="assets/tranc-gym-logo.png">
+  <link rel="preload" href="style.css" as="style">
+  <link rel="preload" href="assets/tranc-gym-logo.png" as="image">
+  <link rel="prefetch" href="index.html">
+  <link rel="prefetch" href="register.html">
+  <link rel="prefetch" href="member.html">
+  <link rel="prefetch" href="admin.html">  <link rel="stylesheet" href="style.css">
 </head>
 <body class="app-page gym-bg" data-page="register">
   <main class="page-shell">
     <section class="page-hero glass-panel">
       <div>
         <div class="brand-mark">
-          <img class="brand-logo-image" src="assets/trace-gym-logo.png" alt="Trace Gym logo">
+          <img class="brand-logo-image" src="assets/tranc-gym-logo.png" alt="Tranc Gym logo">
         </div>
         <h1 data-i18n="register.title">Member Registration</h1>
         <p data-i18n="register.subtitle">Register new gym members and send them for admin approval before access is activated.</p>
@@ -47,10 +52,6 @@
           <div class="field">
             <label for="email" data-i18n="register.email_optional">Email (Optional)</label>
             <input id="email" type="email">
-          </div>
-          <div class="field">
-            <label for="nrc" data-i18n="register.nrc">NRC</label>
-            <input id="nrc" type="text" required>
           </div>
           <div class="field">
             <label for="memberPassword" data-i18n="register.password">Password</label>
@@ -180,3 +181,5 @@
   <script src="pwa.js"></script>
 </body>
 </html>
+
+
