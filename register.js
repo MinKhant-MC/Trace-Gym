@@ -110,7 +110,7 @@
     setMessage('photoMessage', photoDataUrl ? t('register.photo_ready') : '', photoDataUrl ? 'is-success' : '');
   }
 
-  function canvasFromImage(image, maxSize) {
+  function canvasFromImage(image, maxSize, quality) {
     var canvas = byId('photoCanvas') || document.createElement('canvas');
     var scale = Math.min(1, maxSize / Math.max(image.videoWidth || image.naturalWidth, image.videoHeight || image.naturalHeight));
     var width = Math.max(1, Math.round((image.videoWidth || image.naturalWidth) * scale));
@@ -121,7 +121,26 @@
     canvas.height = height;
     context = canvas.getContext('2d');
     context.drawImage(image, 0, 0, width, height);
-    return canvas.toDataURL('image/jpeg', 0.72);
+    return canvas.toDataURL('image/jpeg', quality || 0.55);
+  }
+
+  function compactPhotoData(image) {
+    var attempts = [
+      { size: 360, quality: 0.58 },
+      { size: 280, quality: 0.5 },
+      { size: 220, quality: 0.42 }
+    ];
+    var result = '';
+    var index;
+
+    for (index = 0; index < attempts.length; index += 1) {
+      result = canvasFromImage(image, attempts[index].size, attempts[index].quality);
+      if (result.length < 45000) {
+        return result;
+      }
+    }
+
+    return result;
   }
 
   function handlePhotoFile(file) {
@@ -137,7 +156,7 @@
       image = new Image();
       image.onload = function () {
         stopPhotoCamera();
-        setPhotoPreview(canvasFromImage(image, 720));
+        setPhotoPreview(compactPhotoData(image));
       };
       image.onerror = function () {
         setMessage('photoMessage', t('register.photo_failed'), 'is-danger');
@@ -183,7 +202,7 @@
       setMessage('photoMessage', t('register.open_camera_first'), 'is-danger');
       return;
     }
-    setPhotoPreview(canvasFromImage(video, 720));
+    setPhotoPreview(compactPhotoData(video));
     stopPhotoCamera();
   }
 
@@ -236,6 +255,12 @@
     if (!payload.photo_data) {
       setMessage('registerMessage', t('register.photo_required'), 'is-danger');
       setMessage('photoMessage', t('register.photo_required'), 'is-danger');
+      return;
+    }
+
+    if (payload.photo_data.length > 50000) {
+      setMessage('registerMessage', t('register.photo_too_large'), 'is-danger');
+      setMessage('photoMessage', t('register.photo_too_large'), 'is-danger');
       return;
     }
 
