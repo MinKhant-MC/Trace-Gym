@@ -58,10 +58,12 @@
   }
 
   function collectForm() {
+    var phone = byId('phone').value.trim();
     return {
       full_name: byId('fullName').value.trim(),
-      phone: byId('phone').value.trim(),
+      phone: phone,
       email: byId('email').value.trim(),
+      nrc: phone,
       password: byId('memberPassword').value,
       password_confirm: byId('memberPasswordConfirm').value,
       gender: byId('gender').value,
