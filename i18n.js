@@ -48,7 +48,6 @@
         name: 'Name',
         phone: 'Phone',
         email_optional: 'Email (Optional)',
-        nrc: 'NRC',
         password: 'Password',
         confirm_password: 'Confirm Password',
         password_mismatch: 'Passwords do not match.',
@@ -227,7 +226,6 @@
         extend_months: 'Extend Membership',
         extension_fee: 'Extension Fee',
         new_password_optional: 'New Password (optional)',
-        reset_password_to_nrc: 'Reset member password to NRC',
         saving_member: 'Saving member...',
         member_saved: 'Member information saved.',
         member_save_failed: 'Could not save member information.',
@@ -292,7 +290,7 @@
         register_link: 'အဖွဲ့ဝင်အသစ် စာရင်းသွင်းရန်',
         placeholder_member_identifier: '09xxxxxxxxx',
         placeholder_admin_identifier: 'စီမံခန့်ခွဲသူ အမည်',
-        placeholder_member_password: 'အဖွဲ့ဝင် NRC',
+        placeholder_member_password: 'အဖွဲ့ဝင် စကားဝှက်',
         placeholder_admin_password: 'စီမံခန့်ခွဲသူ စကားဝှက်',
         fill_fields: 'ဝင်ရောက်ရန် အချက်အလက်နှစ်ခုလုံး ဖြည့်ပါ။',
         signing_in: 'ဝင်ရောက်နေပါတယ်...',
@@ -305,7 +303,6 @@
         name: 'အမည်',
         phone: 'ဖုန်းနံပါတ်',
         email_optional: 'အီးမေးလ် (မဖြည့်လည်းရ)',
-        nrc: 'NRC',
         gender: 'လိင်',
         gender_select: 'ရွေးပါ',
         gender_male: 'ကျား',
@@ -515,7 +512,6 @@
   DICTIONARIES.my.admin.edit_member_title = 'Member အချက်အလက် ပြင်ရန်';
   DICTIONARIES.my.admin.edit_member_text = 'Member အချက်အလက်နှင့် သက်တမ်းအချက်အလက်များကို ပြင်နိုင်ပါသည်။';
   DICTIONARIES.my.admin.member_status = 'အခြေအနေ';
-  DICTIONARIES.my.admin.reset_password_to_nrc = 'Member password ကို NRC ပြန်ထားမည်';
   DICTIONARIES.my.admin.saving_member = 'Member အချက်အလက် သိမ်းနေပါသည်...';
   DICTIONARIES.my.admin.member_saved = 'Member အချက်အလက် သိမ်းပြီးပါပြီ။';
   DICTIONARIES.my.admin.member_save_failed = 'Member အချက်အလက် မသိမ်းနိုင်ပါ။';
@@ -673,4 +669,5 @@
     t: t
   };
 })();
+
 
