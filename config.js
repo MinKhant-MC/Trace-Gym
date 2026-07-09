@@ -2,7 +2,7 @@
   'use strict';
 
   window.GYM_CONFIG = {
-    API_URL: 'https://script.google.com/macros/s/AKfycbzudVhe-78qM49i2CiAfRSAvCnbtRFAtF6cZaDGd-wkOI2U7pHEexqyEl-E0N4j8uai/exec',
+    API_URL: 'https://script.google.com/macros/s/AKfycbyRlUpca0L6aXCfxYv3s2Vry2OSrZRi1AB-juexD1z9hRWoL1E-5vD9cTM_I2s4T9CC/exec',
     QR_IMAGE_URL: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=',
     MEMBER_CACHE_TTL_MS: 7 * 24 * 60 * 60 * 1000,
     STORAGE_KEYS: {
