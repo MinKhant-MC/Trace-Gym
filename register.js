@@ -62,7 +62,6 @@
       full_name: byId('fullName').value.trim(),
       phone: byId('phone').value.trim(),
       email: byId('email').value.trim(),
-      nrc: byId('nrc').value.trim(),
       password: byId('memberPassword').value,
       password_confirm: byId('memberPasswordConfirm').value,
       gender: byId('gender').value,
