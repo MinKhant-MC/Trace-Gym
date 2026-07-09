@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.qrserver.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <title>Trace Gym Admin Dashboard</title>
+  <title>Tranc Gym Admin Dashboard</title>
   <meta name="theme-color" content="#15130f">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="assets/trace-gym-logo.png">
@@ -21,10 +21,10 @@
     <aside class="side-panel glass-panel">
       <div>
         <div class="brand-mark">
-          <img class="brand-logo-image" src="assets/trace-gym-logo.png" alt="Trace Gym logo">
+          <img class="brand-logo-image" src="assets/trace-gym-logo.png" alt="Tranc Gym logo">
         </div>
         <h2 data-i18n="admin.sidebar_title">Admin Panel</h2>
-        <p class="muted-text" data-i18n="admin.sidebar_text">Approve members, read member QR codes, and monitor membership status.</p>
+        <p class="muted-text" data-i18n="admin.sidebar_text">Approve members, show gym QR, and monitor membership status.</p>
       </div>
       <div class="language-switcher" data-language-switcher>
         <button class="is-active" type="button" data-lang="en">ENG</button>
@@ -109,16 +109,16 @@
         <article class="glass-panel">
           <div class="section-head">
             <div>
-              <h2 data-i18n="admin.scanner_title">Member QR Check-In</h2>
+              <h2 data-i18n="admin.scanner_title">Gym Entry QR</h2>
+              <p class="section-copy" data-i18n="admin.scanner_text">Show this gym QR on the admin device. Members scan it from their dashboard when they arrive.</p>
             </div>
           </div>
           <div class="scanner-tools">
-            <button id="showGymQrButton" class="secondary-button button-inline" type="button">
+            <button id="showGymQrButton" class="primary-button button-inline" type="button">
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10H7z"></path><path d="M9.5 9.5h1"></path><path d="M13.5 9.5h1"></path><path d="M9.5 13.5h1"></path><path d="M13.5 13.5h1"></path></svg>
               <span data-i18n="admin.show_gym_qr">Show Gym QR</span>
             </button>
           </div>
-          <video id="scannerVideo" class="scanner-video" hidden playsinline muted></video>
           <p id="scannerMessage" class="form-message" aria-live="polite"></p>
         </article>
 
@@ -211,7 +211,7 @@
       </div>
       <div class="qr-card qr-modal-card">
         <div id="adminGymQrImage" class="qr-render" aria-label="Gym entry QR code"></div>
-        <strong id="adminGymQrName" data-i18n="admin.gym_qr_name">Trace Gym Entry QR</strong>
+        <strong id="adminGymQrName" data-i18n="admin.gym_qr_name">Tranc Gym Entry QR</strong>
         <p id="adminGymQrMeta" class="muted-text" data-i18n="admin.gym_qr_meta">Members scan this from their dashboard to check in.</p>
       </div>
     </div>
@@ -364,8 +364,8 @@
   <script src="common.js"></script>
   <script src="auth.js"></script>
   <script src="vendor/qrcode.min.js"></script>
-  <script src="vendor/zxing-browser.min.js"></script>
   <script src="admin.js"></script>
   <script src="pwa.js"></script>
 </body>
 </html>
+
